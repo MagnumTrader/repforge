@@ -1,6 +1,7 @@
 package ui
 
 import "github.com/MagnumTrader/repforge/internal/config"
+import "github.com/MagnumTrader/repforge/internal/domain"
 
 // This is my base template, including html scafolding and imports
 templ Base(title string) {
@@ -12,6 +13,10 @@ templ Base(title string) {
 </head>
 
 <body>
+    <nav>
+    <a href="/">Home</a> 
+    <a href="/workouts">Workouts</a> 
+    </nav>
     { children... }
 </body>
 
@@ -21,5 +26,31 @@ templ Base(title string) {
 templ MainPage() {
 @Base(config.PageTitle) {
 <p>Hello { config.PageTitle }!</p>
+{ children... }
+}
+}
+
+templ WorkOutList(workouts []domain.Workout) {
+@Base(config.PageTitle) {
+<h1>List of workouts </h1>
+<table>
+    <thead>
+        <th>Date</th>
+        <th>Duration</th>
+        <th>Type</th>
+        <th>Notes</th>
+    </thead>
+    <tbody>
+        for _, wo := range workouts {
+        <tr>
+            <td>{ wo.Date }</td>
+            <td>{ wo.Duration }</td>
+            <td>{ wo.Type }</td>
+            <td>{ wo.Notes }</td>
+        </tr>
+        }
+    </tbody>
+</table>
+
 }
 }
