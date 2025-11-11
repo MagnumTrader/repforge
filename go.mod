@@ -4,11 +4,13 @@ go 1.24.5
 
 tool github.com/a-h/templ/cmd/templ
 
-require github.com/gin-gonic/gin v1.11.0
+require (
+	github.com/a-h/templ v0.3.960
+	github.com/gin-gonic/gin v1.11.0
+)
 
 require (
 	github.com/a-h/parse v0.0.0-20250122154542-74294addb73e // indirect
-	github.com/a-h/templ v0.3.960 // indirect
 	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/bytedance/sonic v1.14.0 // indirect
 	github.com/bytedance/sonic/loader v0.3.0 // indirect

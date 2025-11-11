@@ -1,0 +1,25 @@
+package ui
+
+import "github.com/MagnumTrader/repforge/internal/config"
+
+// This is my base template, including html scafolding and imports
+templ Base(title string) {
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{ title }</title>
+</head>
+
+<body>
+    { children... }
+</body>
+
+</html>
+}
+
+templ MainPage() {
+@Base(config.PageTitle) {
+<p>Hello { config.PageTitle }!</p>
+}
+}
