@@ -18,7 +18,7 @@ templ Base(title string) {
 </head>
 
 <body hxt-ext="sse"> 
-    <div id="version" data-version={ config.Version } hidden></div>
+    <div hx-ext="sse" sse-connect="/sse" sse-swap="message">Sse</div>
     <nav>
         <a href="/">Home</a>
         <a href="/workouts">Workouts</a>
