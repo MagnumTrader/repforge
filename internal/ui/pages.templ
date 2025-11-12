@@ -11,9 +11,11 @@ templ Base(title string) {
 
 <head>
     <title>{ title }</title>
+    <script src="/static/hotreload.js"></script>
 </head>
 
 <body>
+    <div id="version" data-version={config.Version} hidden></div>
     <nav>
         <a href="/">Home</a>
         <a href="/workouts">Workouts</a>
@@ -44,8 +46,15 @@ templ WorkOutList(workouts []domain.Workout) {
     <tbody>
         for _, wo := range workouts {
         <tr>
-            <td><a href={fmt.Sprintf("/workouts/%d", wo.Id)}>{wo.Id}</a></td>
-            <td>{ wo.Date }</td>
+            // TODO: I want to implement hot reloading, where my air configureation curls a embedded web server in a js
+            //file
+            // Ok so i cannot have a server
+            // i can try the init function, that should update the version if its not the same version it should reload
+            // initialize the id
+            // in the main page, i actually include the reload script inline so i can include the version calling the
+            function.
+            // and when the server checks that we have a new version it should reload the page
+            <td><a href={ fmt.Sprintf("/workouts/%d", wo.Id) }>{ wo.Date }</a></td>
             <td>{ wo.Duration }</td>
             <td>{ wo.Type }</td>
             <td>{ wo.Notes }</td>

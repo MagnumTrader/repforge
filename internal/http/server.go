@@ -5,16 +5,30 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/MagnumTrader/repforge/internal/config"
 	"github.com/MagnumTrader/repforge/internal/domain"
 	"github.com/MagnumTrader/repforge/internal/ui"
 	"github.com/gin-gonic/gin"
 )
 
 func GetRouter() *gin.Engine {
-	r := gin.Default()
+
+	gin.SetMode(gin.ReleaseMode)
+	r := gin.New()
+
+	// NOTE: using this to remove messages used by hotreloading
+	r.Use(gin.LoggerWithConfig(gin.LoggerConfig{
+		SkipPaths: []string{"/version"},
+	}))
+	r.Use(gin.Recovery())
+
+	r.Static("/static", "./internal/http/static")
 
 	r.GET("/", func(ctx *gin.Context) {
 		ui.MainPage().Render(ctx.Request.Context(), ctx.Writer)
+	})
+	r.GET("/version", func(ctx *gin.Context) {
+		ctx.String(http.StatusOK, config.Version)
 	})
 	r.GET("/health", func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "healthy")
@@ -44,7 +58,6 @@ func GetRouter() *gin.Engine {
 				return
 			}
 		}
-		
 	})
 	return r
 }
