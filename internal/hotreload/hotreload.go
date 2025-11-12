@@ -8,7 +8,7 @@ import (
 
 var watcher *fsnotify.Watcher
 
-func RegisterWatcher(paths ...string) <-chan int8 {
+func RegisterWatcher(paths ...string) <-chan string {
 
 	if watcher != nil {
 		panic("Can only register one time!")
@@ -20,16 +20,14 @@ func RegisterWatcher(paths ...string) <-chan int8 {
 		watcher.Add(path)
 	}
 
-	fmt.Printf("Watcher is watching: %v", watcher.WatchList())
+	fmt.Printf("Watcher is watching: %v\n", watcher.WatchList())
 
-	c := make(chan int8)
+	c := make(chan string, 500)
 	go func() {
 		for {
 			msg := <-watcher.Events
-
 			if msg.Op == fsnotify.Rename {
-				fmt.Printf("File changed %s", msg.Name)
-				c <- 1
+				c <- msg.Name
 				watcher.Add(msg.Name)
 			}
 		}
