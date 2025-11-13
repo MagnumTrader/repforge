@@ -2,3 +2,62 @@
     margin: 0;
     padding: 0;
 }
+
+html,
+body {
+    height: 100vh;
+    overflow: hidden;
+}
+
+body {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    /* nav takes what it needs, main fills rest */
+}
+
+nav {
+    padding: 0.2rem;
+    padding-left: 1rem;
+    background-color: rgb(100, 100, 100);
+}
+
+main {
+    /* no height needed - grid handles it */
+    overflow: auto;
+    /* allows scrolling inside main if needed */
+}
+
+td {
+    text-align: center;
+    border-bottom: dashed;
+    border-bottom-width: 1px;
+}
+
+
+a {
+    text-decoration: none;
+    color: blanchedalmond;
+
+}
+
+a:hover {
+    color: greenyellow;
+}
+
+a {
+    color: black;
+}
+
+.listwrapper {
+    box-sizing: border-box;
+    padding: 0.7rem;
+    height: 100%;
+    /* fills main exactly */
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+
+    &>a {
+        align-self: end;
+    }
+}

@@ -8,9 +8,19 @@ import (
 	"github.com/MagnumTrader/repforge/internal/config"
 	"github.com/MagnumTrader/repforge/internal/domain"
 	"github.com/MagnumTrader/repforge/internal/hotreload"
-	"github.com/MagnumTrader/repforge/internal/ui"
+	"github.com/MagnumTrader/repforge/internal/http/ui"
 	"github.com/gin-gonic/gin"
 )
+
+// So we got off topic
+// But now we can get to work. what is the next thing?
+
+// TODO:
+// - [ ] Add sql folder structure
+// - [ ] Add table for workouts AS IS
+// - [ ] Add functions for creating a workout and store in db
+// - [ ] Append a new row to the list of workouts
+// - [ ] remove notes in list view, add Score ( your own score and what you thought)
 
 func GetRouter() *gin.Engine {
 
