@@ -29,7 +29,7 @@ func GetRouter() *gin.Engine {
 		ui.MainPage().Render(ctx.Request.Context(), ctx.Writer)
 	})
 
-	c := hotreload.RegisterWatcher("./test.txt", "./internal/http/static")
+	c := hotreload.RegisterWatcher("./internal/http/static", "./internal/http/static/styles")
 
 	r.GET("/hotreload", func(ctx *gin.Context) {
 		ctx.Writer.Header().Set("Content-Type", "text/event-stream")
@@ -44,13 +44,10 @@ func GetRouter() *gin.Engine {
 					fmt.Println(err)
 					return
 				}
-				fmt.Println("sending message to client")
 				ctx.Writer.Flush()
 			case <-ctx.Request.Context().Done():
 				return
-
 			}
-
 		}
 	})
 

@@ -11,7 +11,7 @@ var watcher *fsnotify.Watcher
 func RegisterWatcher(paths ...string) <-chan string {
 
 	if watcher != nil {
-		panic("Can only register one time!")
+		panic("Can only register hotreload one time!")
 	}
 
 	watcher, _ = fsnotify.NewWatcher()
