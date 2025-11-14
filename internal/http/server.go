@@ -1,14 +1,13 @@
 package http
 
 import (
-	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/MagnumTrader/repforge/internal/config"
-	"github.com/MagnumTrader/repforge/internal/domain"
-	"github.com/MagnumTrader/repforge/internal/hotreload"
 	"github.com/MagnumTrader/repforge/internal/http/ui"
+	"github.com/MagnumTrader/repforge/internal/infrastructure/db"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,6 +20,8 @@ import (
 // - [ ] Add functions for creating a workout and store in db
 // - [ ] Append a new row to the list of workouts
 // - [ ] remove notes in list view, add Score ( your own score and what you thought)
+
+var woRepo = db.InMem{}
 
 func GetRouter() *gin.Engine {
 
@@ -39,28 +40,6 @@ func GetRouter() *gin.Engine {
 		ui.MainPage().Render(ctx.Request.Context(), ctx.Writer)
 	})
 
-	c := hotreload.RegisterWatcher("./internal/http/static", "./internal/http/static/styles")
-
-	r.GET("/hotreload", func(ctx *gin.Context) {
-		ctx.Writer.Header().Set("Content-Type", "text/event-stream")
-		ctx.Writer.Header().Set("Cache-Control", "no-cache")
-		ctx.Writer.Header().Set("Connection", "keep-alive")
-		ctx.Writer.Header().Set("Transfer-Encoding", "chunked")
-
-		for {
-			select {
-			case file := <-c:
-				if _, err := fmt.Fprintf(ctx.Writer, "data: file %s has changed\n\n", file); err != nil {
-					fmt.Println(err)
-					return
-				}
-				ctx.Writer.Flush()
-			case <-ctx.Request.Context().Done():
-				return
-			}
-		}
-	})
-
 	r.GET("/version", func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, config.Version)
 	})
@@ -68,7 +47,14 @@ func GetRouter() *gin.Engine {
 		ctx.String(http.StatusOK, "healthy")
 	})
 	r.GET("/workouts", func(ctx *gin.Context) {
-		ui.WorkOutList(domain.Workouts).Render(ctx.Request.Context(), ctx.Writer)
+
+		workouts, err := woRepo.GetAllWorkouts(0)
+		if err != nil {
+			ctx.Status(http.StatusInternalServerError)
+			return
+		}
+
+		ui.WorkOutList(workouts).Render(ctx.Request.Context(), ctx.Writer)
 	})
 	r.GET("/workouts/:id", func(ctx *gin.Context) {
 		id := ctx.Param("id")
@@ -84,13 +70,15 @@ func GetRouter() *gin.Engine {
 			return
 		}
 
-		// this logic
-		for _, wo := range domain.Workouts {
-			if wo.Id == parsedId {
-				ui.WorkoutDetailPage(wo).Render(ctx.Request.Context(), ctx.Writer)
-				return
-			}
+		workout, err := woRepo.GetWorkout(parsedId)
+		if err != nil {
+			log.Println(err)
+			ctx.Status(http.StatusInternalServerError)
+			return
 		}
+
+		ui.WorkoutDetailPage(*workout).Render(ctx.Request.Context(), ctx.Writer)
 	})
+
 	return r
 }

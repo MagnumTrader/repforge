@@ -2,14 +2,13 @@ package db
 
 import (
 	"fmt"
-
 	"github.com/MagnumTrader/repforge/internal/domain"
 )
 
 type InMem struct{}
 
 func (d *InMem) GetWorkout(id int) (*domain.Workout, error) {
-	for _, wo := range domain.Workouts {
+	for _, wo := range workouts {
 		if wo.Id == id {
 			return &wo, nil
 		}
@@ -17,9 +16,33 @@ func (d *InMem) GetWorkout(id int) (*domain.Workout, error) {
 	return nil, fmt.Errorf("Workout with id %d not found!", id)
 }
 func (d *InMem) GetAllWorkouts(userId int) ([]domain.Workout, error) {
-	return domain.Workouts, nil
+	return workouts, nil
 }
 // TODO: Implement this
 func (d *InMem) SaveWorkout(workout domain.Workout) error {
 	return nil
+}
+
+var workouts = []domain.Workout{
+	{
+		Id:       1,
+		Date:     "2025-11-10",
+		Type:     "Running",
+		Duration: 30,
+		Notes:    "Morning jog in the park",
+	},
+	{
+		Id:       2,
+		Date:     "2025-11-09",
+		Type:     "Cycling",
+		Duration: 45,
+		Notes:    "Evening ride with friends",
+	},
+	{
+		Id:       3,
+		Date:     "2026-11-08",
+		Type:     "Yoga",
+		Duration: 60,
+		Notes:    "Relaxing session at home",
+	},
 }
