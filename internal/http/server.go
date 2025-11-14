@@ -26,13 +26,7 @@ var woRepo = db.InMem{}
 func GetRouter() *gin.Engine {
 
 	gin.SetMode(gin.ReleaseMode)
-	r := gin.New()
-
-	// NOTE: using this to remove messages used by hotreloading
-	r.Use(gin.LoggerWithConfig(gin.LoggerConfig{
-		SkipPaths: []string{"/version"},
-	}))
-	r.Use(gin.Recovery())
+	r := gin.Default()
 
 	r.Static("/static", "./internal/http/static")
 
@@ -40,9 +34,6 @@ func GetRouter() *gin.Engine {
 		ui.MainPage().Render(ctx.Request.Context(), ctx.Writer)
 	})
 
-	r.GET("/version", func(ctx *gin.Context) {
-		ctx.String(http.StatusOK, config.Version)
-	})
 	r.GET("/health", func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "healthy")
 	})
