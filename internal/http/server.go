@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/MagnumTrader/repforge/internal/config"
 	"github.com/MagnumTrader/repforge/internal/http/ui"
 	"github.com/MagnumTrader/repforge/internal/infrastructure/db"
 	"github.com/gin-gonic/gin"
@@ -17,7 +16,7 @@ import (
 // TODO:
 // - [ ] Add sql folder structure
 // - [ ] Add table for workouts AS IS
-// - [ ] Add functions for creating a workout and store in db
+// - [x] Add functions for creating a workout and store in db
 // - [ ] Append a new row to the list of workouts
 // - [ ] remove notes in list view, add Score ( your own score and what you thought)
 

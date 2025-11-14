@@ -37,7 +37,6 @@ td {
     border-bottom-width: 1px;
 }
 
-
 a {
     text-decoration: none;
     color: blanchedalmond;
@@ -54,6 +53,7 @@ a {
 
 .listwrapper {
     box-sizing: border-box;
+
     height: 100%;
     /* fills main exactly */
     display: grid;
@@ -63,8 +63,11 @@ a {
     &>a {
         align-self: end;
     }
+    &>table {
+        justify-self: center;
+    }
 }
 
 table {
-    width: 100%;
+    width: 80%;
 }

@@ -44,8 +44,8 @@ func TestServer(t *testing.T)  {
 
 
 func TestWorkoutsPage(t *testing.T) {
-	// Clear existing workouts
-	domain.Workouts = []domain.Workout{}
+
+	workouts := []domain.Workout{}
 
 	// Add a workout
 	w := domain.Workout{
@@ -54,7 +54,7 @@ func TestWorkoutsPage(t *testing.T) {
 		Duration: 50,
 		Notes:    "Pool session",
 	}
-	domain.Workouts = append(domain.Workouts, w)
+	workouts = append(workouts, w)
 
 	// Start the router as a test server
 	r := GetRouter() // production router

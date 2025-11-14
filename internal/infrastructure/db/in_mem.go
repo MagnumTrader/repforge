@@ -45,4 +45,11 @@ var workouts = []domain.Workout{
 		Duration: 60,
 		Notes:    "Relaxing session at home",
 	},
+	{
+		Id:       4,
+		Date:     "2026-11-08",
+		Type:     "Gym",
+		Duration: 45,
+		Notes:    "",
+	},
 }
