@@ -72,8 +72,6 @@ func GetRouter() *gin.Engine {
 	})
 	r.GET("/workouts/:id", func(ctx *gin.Context) {
 		id := ctx.Param("id")
-
-		fmt.Printf("id is: %s", id)
 		if id == "" {
 			ctx.Status(http.StatusInternalServerError)
 			return
@@ -86,6 +84,7 @@ func GetRouter() *gin.Engine {
 			return
 		}
 
+		// this logic
 		for _, wo := range domain.Workouts {
 			if wo.Id == parsedId {
 				ui.WorkoutDetailPage(wo).Render(ctx.Request.Context(), ctx.Writer)

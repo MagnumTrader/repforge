@@ -1,0 +1,93 @@
+package ui
+
+import "github.com/MagnumTrader/repforge/internal/config"
+import "github.com/MagnumTrader/repforge/internal/domain"
+import "fmt"
+
+// This is my base template, including html scafolding and imports
+templ Base(title string) {
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>{ title }</title>
+    <link rel="stylesheet" href="/static/styles/styles.css" type="text/css" />
+    <script src="/static/hotreload.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"
+        integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav>
+        <div>
+            <a href="/">Home</a>
+            <a href="/workouts">Workouts</a>
+        </div>
+        <a>USERNAME</a>
+    </nav>
+    <main>
+        { children... }
+    </main>
+</body>
+
+</html>
+}
+
+templ MainPage() {
+@Base(config.PageTitle) {
+<p>Hello { config.PageTitle }!</p>
+{ children... }
+}
+}
+
+templ WorkOutList(workouts []domain.Workout) {
+@Base(config.PageTitle) {
+<div class="listwrapper">
+    <h1>List of workouts </h1>
+    <table>
+        <thead>
+            <th>Date</th>
+            <th>Duration</th>
+            <th>Type</th>
+            <th>Notes</th>
+        </thead>
+        <tbody>
+            for _, wo := range workouts {
+            <tr>
+                <td><a href={ fmt.Sprintf("/workouts/%d", wo.Id) }>{ wo.Date }</a></td>
+                <td>{ wo.Duration }</td>
+                <td>{ wo.Type }</td>
+                <td>{ wo.Notes }</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    <a href="#">Add workout</a>
+</div>
+}
+}
+
+templ WorkoutDetailPage(workout domain.Workout) {
+@Base("Workout Details") {
+<h1>Workout Details</h1>
+<table>
+    <tr>
+        <th>Date</th>
+        <td>{ workout.Date }</td>
+    </tr>
+    <tr>
+        <th>Type</th>
+        <td>{ workout.Type }</td>
+    </tr>
+    <tr>
+        <th>Duration (minutes)</th>
+        <td>{ workout.Duration }</td>
+    </tr>
+    <tr>
+        <th>Notes</th>
+        <td>{ workout.Notes }</td>
+    </tr>
+</table>
+}
+}

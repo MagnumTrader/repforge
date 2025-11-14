@@ -16,14 +16,18 @@ body {
 }
 
 nav {
+    display: flex;
+    justify-content: space-between;
     padding: 0.2rem;
     padding-left: 1rem;
+    padding-right: 0.5rem;
     background-color: rgb(100, 100, 100);
 }
 
 main {
     /* no height needed - grid handles it */
     overflow: auto;
+    padding: 0.7rem;
     /* allows scrolling inside main if needed */
 }
 
@@ -50,7 +54,6 @@ a {
 
 .listwrapper {
     box-sizing: border-box;
-    padding: 0.7rem;
     height: 100%;
     /* fills main exactly */
     display: grid;
@@ -60,4 +63,8 @@ a {
     &>a {
         align-self: end;
     }
+}
+
+table {
+    width: 100%;
 }
