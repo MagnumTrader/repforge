@@ -1,0 +1,29 @@
+package ui
+
+templ NavBar() {
+    <nav>
+        <div id="navbuttons">
+            @NavButton("Home", "/")
+            @NavButton("Workouts", "/workouts")
+        </div>
+        <span id="time">Time will tell</span>
+    </nav>
+}
+
+templ NavButton(label string, url string) {
+    {{attrs := make(templ.Attributes)}}
+    {{ if url != "" {
+        attrs["hx-push-url"] = url
+    }
+    }}
+    {{attrs["another-attributew"] = 123456}}
+
+    <span 
+        hx-get={url}
+        hx-target="#content" 
+        {attrs...}
+        >
+        { label }
+    </span>
+}
+

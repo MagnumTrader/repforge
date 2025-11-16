@@ -43,13 +43,22 @@ a {
 
 }
 
-a:hover {
+#navbuttons {
+    &>span:not(:first-child) {
+        margin-left: 0.5rem;
+    }
+}
+
+a:hover, nav span:hover {
+    cursor: pointer;
     color: greenyellow;
 }
 
 a {
     color: black;
 }
+
+
 
 .listwrapper {
     box-sizing: border-box;

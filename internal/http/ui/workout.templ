@@ -1,0 +1,50 @@
+package ui
+
+import "github.com/MagnumTrader/repforge/internal/domain"
+import "fmt"
+
+
+templ WorkOutListPartial(workouts []domain.Workout) {
+<div class="listwrapper">
+    <h1>List of workouts </h1>
+    <table>
+        <thead>
+            <th>Date</th>
+            <th>Duration</th>
+            <th>Type</th>
+        </thead>
+        <tbody>
+            for _, wo := range workouts {
+            <tr>
+                <td><a href={ fmt.Sprintf("/workouts/%d", wo.Id) }>{ wo.Date }</a></td>
+                <td>{ wo.Duration }</td>
+                <td>{ wo.Type }</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+    <a href="#">Add workout</a>
+</div>
+}
+
+templ WorkoutDetailsPartial(workout domain.Workout) {
+<h1>Workout Details</h1>
+<table>
+    <tr>
+        <th>Date</th>
+        <td>{ workout.Date }</td>
+    </tr>
+    <tr>
+        <th>Type</th>
+        <td>{ workout.Type }</td>
+    </tr>
+    <tr>
+        <th>Duration (minutes)</th>
+        <td>{ workout.Duration }</td>
+    </tr>
+    <tr>
+        <th>Notes</th>
+        <td>{ workout.Notes }</td>
+    </tr>
+</table>
+}
