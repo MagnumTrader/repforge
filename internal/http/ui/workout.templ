@@ -23,7 +23,7 @@ templ WorkOutListPartial(workouts []domain.Workout) {
             }
         </tbody>
     </table>
-    <a href="#">Add workout</a>
+    <span hx-get="/workouts/new" class="link" hx-target="#overlay-content" _="on click remove .hidden from #overlay">Add workout</span>
 </div>
 }
 
@@ -40,7 +40,7 @@ templ WorkoutDetailsPartial(workout domain.Workout) {
     </tr>
     <tr>
         <th>Duration (minutes)</th>
-        <td>{ workout.Duration }</td>
+            <td>{ workout.Duration }</td>
     </tr>
     <tr>
         <th>Notes</th>
@@ -48,3 +48,8 @@ templ WorkoutDetailsPartial(workout domain.Workout) {
     </tr>
 </table>
 }
+
+templ WorkoutForm(workout domain.Workout) {
+    <p>hello world</p>
+}
+

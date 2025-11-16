@@ -49,14 +49,6 @@ a {
     }
 }
 
-a:hover, nav span:hover {
-    cursor: pointer;
-    color: greenyellow;
-}
-
-a {
-    color: black;
-}
 
 
 
@@ -69,9 +61,13 @@ a {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto 1fr;
 
-    &>a {
+    &>span {
         align-self: end;
+        justify-self: start;
+        width: auto;
+
     }
+
     &>table {
         justify-self: center;
     }
@@ -79,4 +75,54 @@ a {
 
 table {
     width: 80%;
+}
+
+a:hover,
+nav span:hover,
+span.link:hover {
+    cursor: pointer;
+    color: greenyellow;
+}
+
+span.link {
+    display: inline-block;
+}
+
+a {
+    color: black;
+}
+
+#overlay {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 2fr;
+    padding: 5px;
+    position: absolute;
+    justify-self: center;
+    align-self: center;
+    width: 50vw;
+    background-color: rgba(0, 0, 0, 0.3);
+    /* semi-transparent black */
+    backdrop-filter: blur(5px);
+    border-radius: 2px;
+
+    &.hidden {
+        display: none;
+    }
+
+    &>div:not(#overlay-content) {
+        text-align: right;
+        &>svg {
+            &:hover {
+                cursor: pointer;
+                color: greenyellow;
+            }
+        }
+    };
+
+    &>#overlay-content {
+        border-radius: 2px;
+        background-color: white;
+        padding: 5px;
+    }
 }

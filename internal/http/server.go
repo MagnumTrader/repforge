@@ -8,22 +8,12 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/MagnumTrader/repforge/internal/domain"
 	"github.com/MagnumTrader/repforge/internal/http/ui"
 	"github.com/MagnumTrader/repforge/internal/infrastructure/db"
 	"github.com/a-h/templ"
 	"github.com/gin-gonic/gin"
 )
-
-// So we got off topic
-// But now we can get to work. what is the next thing?
-/*
-TODO:
-Lets move this shit to htmx.
-The main things are to separate partials and site
-- [x]  make the base generic with a main #content
-- [x]  remake other pages to be partials
-- [x]  lets do so we can use it as is but with this structure
-*/
 
 type app struct {
 	db *db.Db
@@ -89,13 +79,12 @@ func (app *app) workoutDetails(ctx *gin.Context) {
 	template.Render(ctx.Request.Context(), ctx.Writer)
 }
 func (app *app) newWorkout(ctx *gin.Context) {
-	if headerExist(ctx, HXREQUEST) {
+	if isHtmxRequest(ctx) {
 		// we should render the partial
-		slog.Info("this is a htmx request")
-		ctx.Writer.Write([]byte(`<span hx-on:click="alert('hello world i said!')">'hello world'</span>`))
-	} else {
-		slog.Info("this is not")
-	}
+		template := ui.WorkoutForm(domain.Workout{})
+		template.Render(ctx.Request.Context(), ctx.Writer)
+		return
+	} 
 }
 
 func isHtmxRequest(ctx *gin.Context) bool {
