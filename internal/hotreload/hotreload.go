@@ -20,7 +20,11 @@ func RegisterWatcher(paths ...string) <-chan string {
 		watcher.Add(path)
 	}
 
-	fmt.Printf("Watcher is watching: %v\n", watcher.WatchList())
+	fmt.Print("Watcher is watching: ")
+	for _, file := range watcher.WatchList() {
+		fmt.Printf(`"%s", `, file)
+	}
+	fmt.Println()
 
 	c := make(chan string, 500)
 	go func() {
