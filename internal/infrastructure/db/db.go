@@ -73,12 +73,21 @@ func (d *Db) GetAllWorkouts(userId int) ([]domain.Workout, error) {
 
 	return workouts, nil
 }
-func (d *Db) SaveWorkout(workout domain.Workout) error {
-	_, err := d.inner.Exec("INSERT INTO workouts (date, duration, type, notes) VALUES (?, ?, ?, ?)",
+func (d *Db) SaveWorkout(workout *domain.Workout) error {
+	row, err := d.inner.Exec("INSERT INTO workouts (date, duration, type, notes) VALUES (?, ?, ?, ?)",
 		workout.Date,
 		workout.Duration,
 		workout.Type,
 		workout.Notes,
 	)
-	return err
+
+	if err != nil {
+	  return err
+	}
+	
+	// Sqlite3 supports this and we have autoincrement on The id
+	id, _ := row.LastInsertId()
+	workout.Id = int(id)
+
+	return nil
 }

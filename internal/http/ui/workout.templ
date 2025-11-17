@@ -13,15 +13,9 @@ templ WorkOutListPartial(workouts []domain.Workout) {
             <th>Duration</th>
             <th>Type</th>
         </thead>
-        <tbody>
+        <tbody id="workout-list">
             for _, wo := range workouts {
-            <tr>
-                <td>
-                    @NavButton(wo.Date, fmt.Sprintf("/workouts/%d", wo.Id))
-                </td>
-                <td>{ wo.Duration }</td>
-                <td>{ wo.Type }</td>
-            </tr>
+            @WorkoutTableRow(wo)
             }
         </tbody>
     </table>
@@ -30,6 +24,16 @@ templ WorkOutListPartial(workouts []domain.Workout) {
         workout
     </span>
 </div>
+}
+
+templ WorkoutTableRow(wo domain.Workout) {
+<tr>
+    <td>
+        @NavButton(wo.Date, fmt.Sprintf("/workouts/%d", wo.Id))
+    </td>
+    <td>{ wo.Duration }</td>
+    <td>{ wo.Type }</td>
+</tr>
 }
 
 templ WorkoutDetailsPartial(workout domain.Workout) {
@@ -57,14 +61,15 @@ templ WorkoutDetailsPartial(workout domain.Workout) {
 // TODO: I can return a Successfully created X, close = hide overlay
 // with a link to the object
 templ WorkoutForm(workout domain.Workout) {
-<form id="workout-form" hx-post="/workouts/new" hx-target="#workout-form" hx-swap="outerHTML" _="on htmx:afterRequest remove me then add .hidden to #overlay">
+<form id="workout-form" hx-post="/workouts/new" hx-target="#workout-list" hx-swap="beforeend"
+    _="on htmx:afterRequest remove me then add .hidden to #overlay">
     <div class="form-row">
         <label for="date">Date</label>
-        <input id="date" name="date" type="date" value={time.Now().Format("2006-01-02")} required/>
+        <input id="date" name="date" type="date" value={ time.Now().Format("2006-01-02") } required />
     </div>
     <div class="form-row">
         <label for="duration">Duration</label>
-        <input id="duration" name="duration" type="number" required/>
+        <input id="duration" name="duration" type="number"/>
     </div>
     <div class="form-row">
         <label for="type">Type</label>
@@ -72,7 +77,7 @@ templ WorkoutForm(workout domain.Workout) {
     </div>
     <div class="form-row">
         <label for="note">Note</label>
-        <textarea id="note" name="note" type="text" rows="4" required/>
+        <textarea id="note" name="note" type="text" rows="4"></textarea>
     </div>
     <button type="submit">Create</button>
     <button type="button" _="on click remove #workout-form then add .hidden to #overlay">Cancel</button>
