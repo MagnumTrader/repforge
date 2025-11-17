@@ -18,7 +18,7 @@ templ Head() {
 // This is my base template, including html scafolding and imports
 templ Base(content ...templ.Component) {
 <!DOCTYPE html>
-<html>
+<html lang="en-GB">
 @Head()
 
 <body>
@@ -41,9 +41,10 @@ templ MainPage() {
 }
 
 templ Overlay() {
-<div id="overlay">
-    <div >
-        <svg _="on click add .hidden to #overlay" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<div id="overlay" class="hidden">
+    <div>
+        <svg _="on click add .hidden to #overlay" width="20" height="20" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
             <line x1="18" y1="6" x2="6" y2="18"></line>
             <line x1="6" y1="6" x2="18" y2="18"></line>
         </svg>
@@ -52,4 +53,8 @@ templ Overlay() {
         { children... }
     </div>
 </div>
+}
+
+templ SuccessForm(objectName string) {
+<p>Successfully created { objectName }</p>
 }

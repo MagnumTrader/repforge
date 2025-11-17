@@ -78,13 +78,47 @@ func (app *app) workoutDetails(ctx *gin.Context) {
 	}
 	template.Render(ctx.Request.Context(), ctx.Writer)
 }
-func (app *app) newWorkout(ctx *gin.Context) {
+func (app *app) newWorkoutForm(ctx *gin.Context) {
 	if isHtmxRequest(ctx) {
 		// we should render the partial
 		template := ui.WorkoutForm(domain.Workout{})
 		template.Render(ctx.Request.Context(), ctx.Writer)
 		return
-	} 
+	}
+}
+
+func (app *app) newWorkout(ctx *gin.Context) {
+
+	workout := struct {
+		Date     string `form:"date"  binding:"required"`
+		Duration int    `form:"duration"`
+		Type     string `form:"type"`
+		Note     string `form:"note" binding:"required"`
+	}{}
+
+	if err := ctx.ShouldBind(&workout); err != nil {
+		slog.Error("Failed to parse form", "Error:", err)
+		ctx.Status(http.StatusInternalServerError)
+		return
+	}
+
+	slog.Info("created entity", "Name: ", workout.Date)
+	slog.Info("", "email: ", workout.Note)
+
+	// here we should probablt have a service to the handler?
+	err := app.db.SaveWorkout(domain.Workout{
+		Date:     workout.Date,
+		Type:     workout.Type,
+		Duration: workout.Duration,
+		Notes:    workout.Note,
+	})
+
+	if err != nil{
+		slog.Error("Failed to insert into DB", "Error:", err)
+		ctx.Status(http.StatusInternalServerError)
+		return
+	}
+	ctx.Status(http.StatusOK)
 }
 
 func isHtmxRequest(ctx *gin.Context) bool {
@@ -115,7 +149,8 @@ func GetRouter() *gin.Engine {
 	r.GET("/health", app.healthyHandler)
 	r.GET("/workouts", app.workoutsListHandler)
 	r.GET("/workouts/:id", app.workoutDetails)
-	r.GET("/workouts/new", app.newWorkout)
+	r.GET("/workouts/new", app.newWorkoutForm)
+	r.POST("/workouts/new", app.newWorkout)
 	r.GET("/time", func(ctx *gin.Context) {
 		time := time.Now()
 		s := time.Format("15:04")

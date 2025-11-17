@@ -93,7 +93,6 @@ a {
 }
 
 #overlay {
-    /* TODO: make overlay cover the entire screen. dont complicate things*/
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto 2fr;

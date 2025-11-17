@@ -2,7 +2,7 @@ package ui
 
 import "github.com/MagnumTrader/repforge/internal/domain"
 import "fmt"
-
+import "time"
 
 templ WorkOutListPartial(workouts []domain.Workout) {
 <div class="listwrapper">
@@ -16,14 +16,19 @@ templ WorkOutListPartial(workouts []domain.Workout) {
         <tbody>
             for _, wo := range workouts {
             <tr>
-                <td>@NavButton(wo.Date, fmt.Sprintf("/workouts/%d", wo.Id))</td>
+                <td>
+                    @NavButton(wo.Date, fmt.Sprintf("/workouts/%d", wo.Id))
+                </td>
                 <td>{ wo.Duration }</td>
                 <td>{ wo.Type }</td>
             </tr>
             }
         </tbody>
     </table>
-    <span hx-get="/workouts/new" class="link" hx-target="#overlay-content" _="on click remove .hidden from #overlay">Add workout</span>
+    <span hx-get="/workouts/new" class="link" hx-target="#overlay-content" _="on click remove .hidden from #overlay">
+        Add
+        workout
+    </span>
 </div>
 }
 
@@ -40,7 +45,7 @@ templ WorkoutDetailsPartial(workout domain.Workout) {
     </tr>
     <tr>
         <th>Duration (minutes)</th>
-            <td>{ workout.Duration }</td>
+        <td>{ workout.Duration }</td>
     </tr>
     <tr>
         <th>Notes</th>
@@ -49,7 +54,27 @@ templ WorkoutDetailsPartial(workout domain.Workout) {
 </table>
 }
 
+// TODO: I can return a Successfully created X, close = hide overlay
+// with a link to the object
 templ WorkoutForm(workout domain.Workout) {
-    <p>hello world</p>
+<form id="workout-form" hx-post="/workouts/new" hx-target="#workout-form" hx-swap="outerHTML" _="on htmx:afterRequest remove me then add .hidden to #overlay">
+    <div class="form-row">
+        <label for="date">Date</label>
+        <input id="date" name="date" type="date" value={time.Now().Format("2006-01-02")} required/>
+    </div>
+    <div class="form-row">
+        <label for="duration">Duration</label>
+        <input id="duration" name="duration" type="number" required/>
+    </div>
+    <div class="form-row">
+        <label for="type">Type</label>
+        <input id="type" name="type" type="text" required/>
+    </div>
+    <div class="form-row">
+        <label for="note">Note</label>
+        <textarea id="note" name="note" type="text" rows="4" required/>
+    </div>
+    <button type="submit">Create</button>
+    <button type="button" _="on click remove #workout-form then add .hidden to #overlay">Cancel</button>
+</form>
 }
-

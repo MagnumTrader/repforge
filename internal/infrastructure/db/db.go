@@ -74,5 +74,11 @@ func (d *Db) GetAllWorkouts(userId int) ([]domain.Workout, error) {
 	return workouts, nil
 }
 func (d *Db) SaveWorkout(workout domain.Workout) error {
-	return nil
+	_, err := d.inner.Exec("INSERT INTO workouts (date, duration, type, notes) VALUES (?, ?, ?, ?)",
+		workout.Date,
+		workout.Duration,
+		workout.Type,
+		workout.Notes,
+	)
+	return err
 }
