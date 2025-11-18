@@ -58,8 +58,10 @@ templ WorkoutDetailsPartial(workout domain.Workout) {
 </table>
 }
 
-// TODO: I can return a Successfully created X, close = hide overlay
-// with a link to the object
+
+// TODO: 
+// Can we make this generic without the target thing? because right now 
+// its really dependant on the overlay and popup style
 templ WorkoutForm(workout domain.Workout) {
 <form id="workout-form" hx-post="/workouts/new" hx-target="#workout-list" hx-swap="beforeend"
     _="on htmx:afterRequest remove me then add .hidden to #overlay">

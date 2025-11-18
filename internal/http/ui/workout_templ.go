@@ -195,8 +195,9 @@ func WorkoutDetailsPartial(workout domain.Workout) templ.Component {
 	})
 }
 
-// TODO: I can return a Successfully created X, close = hide overlay
-// with a link to the object
+// TODO:
+// Can we make this generic without the target thing? because right now
+// its really dependant on the overlay and popup style
 func WorkoutForm(workout domain.Workout) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -225,7 +226,7 @@ func WorkoutForm(workout domain.Workout) templ.Component {
 		var templ_7745c5c3_Var11 string
 		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(time.Now().Format("2006-01-02"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/workout.templ`, Line: 68, Col: 88}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/workout.templ`, Line: 70, Col: 88}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {
