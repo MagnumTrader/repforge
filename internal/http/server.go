@@ -81,7 +81,7 @@ func (app *app) workoutDetails(ctx *gin.Context) {
 func (app *app) newWorkoutForm(ctx *gin.Context) {
 	if isHtmxRequest(ctx) {
 		// we should render the partial
-		template := ui.WorkoutForm(domain.Workout{})
+		template := ui.WorkoutForm(nil)
 		template.Render(ctx.Request.Context(), ctx.Writer)
 		return
 	}
