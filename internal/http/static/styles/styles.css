@@ -1,126 +1,187 @@
 * {
-    margin: 0;
-    padding: 0;
+margin: 0;
+padding: 0;
 }
 
 html,
 body {
-    height: 100vh;
-    overflow: hidden;
+height: 100vh;
+overflow: hidden;
 }
 
 body {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    /* nav takes what it needs, main fills rest */
+display: grid;
+grid-template-rows: auto 1fr;
+/* nav takes what it needs, main fills rest */
 }
 
 nav {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.2rem;
-    padding-left: 1rem;
-    padding-right: 0.5rem;
-    background-color: rgb(100, 100, 100);
+display: flex;
+justify-content: space-between;
+padding: 0.2rem;
+padding-left: 1rem;
+padding-right: 0.5rem;
+background-color: rgb(100, 100, 100);
 }
 
 main {
-    /* no height needed - grid handles it */
-    overflow: auto;
-    padding: 0.7rem;
-    /* allows scrolling inside main if needed */
+/* no height needed - grid handles it */
+overflow: auto;
+padding: 0.7rem;
+/* allows scrolling inside main if needed */
 }
-
+content: attr(field);
+}
+}
 td {
-    text-align: center;
-    border-bottom: dashed;
-    border-bottom-width: 1px;
+text-align: center;
+border-bottom: dashed;
+border-bottom-width: 1px;
 }
 
 a {
-    text-decoration: none;
-    color: blanchedalmond;
+text-decoration: none;
+color: blanchedalmond;
 
 }
 
 #navbuttons {
-    &>span:not(:first-child) {
-        margin-left: 0.5rem;
-    }
+&>span:not(:first-child) {
+margin-left: 0.5rem;
+}
 }
 
 
 
 
 .listwrapper {
-    box-sizing: border-box;
+box-sizing: border-box;
 
-    height: 100%;
-    /* fills main exactly */
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto 1fr;
+height: 100%;
+/* fills main exactly */
+display: grid;
+grid-template-columns: 1fr;
+grid-template-rows: auto auto 1fr;
 
-    &>span {
-        align-self: end;
-        justify-self: start;
-        width: auto;
+&>span {
+align-self: end;
+justify-self: start;
+width: auto;
 
-    }
+}
 
-    &>table {
-        justify-self: center;
-    }
+&>table {
+justify-self: center;
+}
 }
 
 table {
-    width: 80%;
+width: 80%;
 }
 
 a:hover,
 .navbutton:hover,
 span.link:hover {
-    cursor: pointer;
-    color: greenyellow;
+cursor: pointer;
+color: greenyellow;
 }
 
 span.link {
-    display: inline-block;
+display: inline-block;
 }
 
 a {
-    color: black;
+color: black;
 }
 
 #overlay {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 2fr;
-    position: absolute;
+display: grid;
+grid-template-columns: 1fr;
+grid-template-rows: auto 2fr;
+position: absolute;
 
-    justify-self: center;
-    align-self: center;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
-    /* semi-transparent black */
-    backdrop-filter: blur(5px);
+justify-self: center;
+align-self: center;
+width: 100%;
+height: 100%;
+background-color: rgba(0, 0, 0, 0.3);
+/* semi-transparent black */
+backdrop-filter: blur(5px);
 
-    &.hidden {
-        display: none;
-    }
-    &>div:not(#overlay-content) {
-        text-align: right;
-        &>svg {
-            padding-top: 5px;
-            padding-right: 5px;
-            &:hover {
-                cursor: pointer;
-                color: greenyellow;
-            }
-        }
-    };
-    &>#overlay-content {
-        padding: 10px;
+. {
+
+}
+&.hidden {
+display: none;
+}
+&>div:not(#overlay-content) {
+text-align: right;
+&>svg
+{
+padding-top: 5px;
+padding-right: 5px;
+&:hover {
+cursor: pointer;
+color: greenyellow;
+}
+}
+};
+&>#overlay-content {
+padding: 10px;
+}
+}
+
+span[hover-info] {
+position: relative;
+font-size: 0.8em;
+display: inline-block;
+padding-left: 0.4rem;
+padding-right: 0.4rem;
+border-radius: 50%;
+border: solid;
+border-width: 1px;
+cursor:help;
+}
+
+span[hover-info]::after {
+
+content: attr(hover-info);
+position: absolute;
+top: 25px;
+transform: translateX(-50%) translateY(5px);
+background: white;
+color: #333;
+padding: 0.25em 1em;
+border-radius: 5px;
+border: 1px solid #ddd;
+max-width: 300px;
+width: max-content;
+z-index: 1000;
+font-size: 0.875rem;
+font-weight: normal;
+line-height: 1;
+white-space: normal;
+
+/* Hidden by default */
+opacity: 0;
+visibility: hidden;
+transition: all 0.2s ease;
+pointer-events: none;
+}
+
+span[hover-info]:hover::after {
+opacity: 1;
+visibility: visible;
+}
+
+.table-buttons {
+display: flex;
+gap: 5px;
+}
+.table-buttons span {
+    &:hover {
+        cursor: pointer;
+        color: greenyellow;
+        text-decoration: underline;
     }
 }

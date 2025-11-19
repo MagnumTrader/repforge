@@ -87,6 +87,28 @@ func (app *app) newWorkoutForm(ctx *gin.Context) {
 	}
 }
 
+func (app *app) deleteWorkout(ctx *gin.Context) {
+	id := ctx.Param("id")
+	if id == "" {
+		ctx.Status(http.StatusInternalServerError)
+		return
+	}
+
+	parsedId, err := strconv.Atoi(id)
+
+	if err != nil {
+		ctx.Status(http.StatusInternalServerError)
+		return
+	}
+	err = app.db.DeleteWorkout(parsedId)
+	if err != nil {
+		slog.Error("Error when deleting workout", "error", err)
+		ctx.Status(http.StatusInternalServerError)
+		return
+	}
+	ctx.Status(http.StatusOK)
+}
+
 func (app *app) newWorkout(ctx *gin.Context) {
 
 	workout := struct {
@@ -153,6 +175,7 @@ func GetRouter() *gin.Engine {
 	r.GET("/health", app.healthyHandler)
 	r.GET("/workouts", app.workoutsListHandler)
 	r.GET("/workouts/:id", app.workoutDetails)
+	r.DELETE("/workouts/:id", app.deleteWorkout)
 	r.GET("/workouts/new", app.newWorkoutForm)
 	r.POST("/workouts/new", app.newWorkout)
 	r.GET("/time", func(ctx *gin.Context) {

@@ -3,58 +3,60 @@ package ui
 import "github.com/MagnumTrader/repforge/internal/config"
 
 templ Head() {
-
-<head>
-    <title>{ config.PageTitle }</title>
-    <link rel="stylesheet" href="/static/styles/styles.css" type="text/css" />
-    <script src="/static/hotreload.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"
-        integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz"
-        crossorigin="anonymous"></script>
-    <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
-</head>
+	<head>
+		<title>{ config.PageTitle }</title>
+		<link rel="stylesheet" href="/static/styles/styles.css" type="text/css"/>
+		<script src="/static/hotreload.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js" integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz" crossorigin="anonymous"></script>
+		<script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
+	</head>
 }
 
 // This is my base template, including html scafolding and imports
 templ Base(content ...templ.Component) {
-<!DOCTYPE html>
-<html lang="en-GB">
-@Head()
-
-<body>
-    @Overlay()
-    @NavBar()
-    <main id="content">
-        for _, c := range content {
-        @c
-        }
-        { children... }
-    </main>
-</body>
-
-</html>
+	<!DOCTYPE html>
+	<html lang="en-GB">
+		@Head()
+		<body>
+			@Overlay()
+			@NavBar()
+			<main id="content">
+				for _, c := range content {
+					@c
+				}
+				{ children... }
+			</main>
+		</body>
+	</html>
 }
 
 templ MainPage() {
-<p>Hello { config.PageTitle }!</p>
-{ children... }
+	<label>Hello { config.PageTitle }! <span hover-info="This is my tip">i</span></label>
+	{ children... }
 }
 
 templ Overlay() {
-<div id="overlay" class="hidden">
-    <div>
-        <svg _="on click add .hidden to #overlay" width="20" height="20" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
-    </div>
-    <div id="overlay-content">
-        { children... }
-    </div>
-</div>
+	<div id="overlay" class="hidden">
+		<div>
+			<svg
+				_="on click add .hidden to #overlay"
+				width="20"
+				height="20"
+				viewBox="0 0 24 24"
+				fill="none"
+				stroke="currentColor"
+				stroke-width="2"
+			>
+				<line x1="18" y1="6" x2="6" y2="18"></line>
+				<line x1="6" y1="6" x2="18" y2="18"></line>
+			</svg>
+		</div>
+		<div id="overlay-content">
+			{ children... }
+		</div>
+	</div>
 }
 
 templ SuccessForm(objectName string) {
-<p>Successfully created { objectName }</p>
+	<p>Successfully created { objectName }</p>
 }

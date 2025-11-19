@@ -4,6 +4,7 @@ type WorkOutRepo interface {
 	GetWorkout(id int) (*Workout, error)
 	GetAllWorkouts(userId int) ([]Workout, error)
 	SaveWorkout(workout *Workout) error
+	DeleteWorkout(id int) error
 }
 
 type Workout struct {
