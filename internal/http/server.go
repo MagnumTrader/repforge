@@ -38,7 +38,8 @@ func GetRouter() *gin.Engine {
 
 	r.Static("/static", "./internal/http/static")
 
-	service := services.NewWorkoutService(db.NewDb())
+	db := db.NewDb()
+	service := services.NewWorkoutService(db)
 	routes.RegisterWorkoutRoutes(r, service)
 
 	r.GET("/", mainPage)
