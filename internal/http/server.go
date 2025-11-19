@@ -107,6 +107,7 @@ func (app *app) deleteWorkout(ctx *gin.Context) {
 		return
 	}
 	ctx.Status(http.StatusOK)
+	ctx.Writer.Write([]byte(""))
 }
 
 func (app *app) newWorkout(ctx *gin.Context) {

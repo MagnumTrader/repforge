@@ -38,6 +38,7 @@ templ WorkoutTableRow(wo domain.Workout) {
         <span 
         hx-delete={fmt.Sprintf("/workouts/%d", wo.Id)}
         hx-target="closest tr"
+        hx-swap="outerHTML"
         >delete</span>
     </td>
 </tr>
