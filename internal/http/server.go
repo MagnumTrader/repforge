@@ -15,10 +15,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type app struct {
-	db *db.Db
-}
-
 func mainPage(ctx *gin.Context) {
 	var template templ.Component = ui.MainPage()
 	if !handlers.IsHtmxRequest(ctx) {

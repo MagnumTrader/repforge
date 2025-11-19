@@ -4,10 +4,8 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"strings"
 	"testing"
 
-	"github.com/MagnumTrader/repforge/internal/domain"
 )
 
 func fatalErr(err error, t *testing.T)  {

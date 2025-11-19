@@ -12,7 +12,7 @@ func NewWorkoutService(repo domain.WorkOutRepo) *WorkoutService {
 	}
 }
 
-func (s *WorkoutService)CreateWorkout(date, kind, note string, duration int) (*domain.Workout, error) {
+func (s *WorkoutService) CreateWorkout(date, kind, note string, duration int) (*domain.Workout, error) {
 	workout := &domain.Workout{
 		Date:     date,
 		Kind:     kind,
@@ -27,14 +27,14 @@ func (s *WorkoutService)CreateWorkout(date, kind, note string, duration int) (*d
 	return workout, nil
 }
 
-func (s *WorkoutService)DeleteWorkout(id int) error {
+func (s *WorkoutService) DeleteWorkout(id int) error {
 	return s.repo.DeleteWorkout(id)
 }
-func (s *WorkoutService)GetWorkout(id int) (*domain.Workout, error) {
+
+func (s *WorkoutService) GetWorkout(id int) (*domain.Workout, error) {
 	return s.repo.GetWorkout(id)
 }
-func (s *WorkoutService)GetAll() ([]domain.Workout, error) {
+
+func (s *WorkoutService) GetAll() ([]domain.Workout, error) {
 	return s.repo.GetAllWorkouts(0)
 }
-
-
