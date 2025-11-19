@@ -91,3 +91,8 @@ func (d *Db) SaveWorkout(workout *domain.Workout) error {
 
 	return nil
 }
+
+func (d *Db) DeleteWorkout(id int) error {
+	_, err := d.inner.Exec("delete from workouts where id = ?", id)
+	return err
+}

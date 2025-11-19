@@ -33,6 +33,13 @@ templ WorkoutTableRow(wo domain.Workout) {
     </td>
     <td>{ wo.Duration }</td>
     <td>{ wo.Type }</td>
+    <td class="table-buttons">
+        <span>edit</span>
+        <span 
+        hx-delete={fmt.Sprintf("/workouts/%d", wo.Id)}
+        hx-target="closest tr"
+        >delete</span>
+    </td>
 </tr>
 }
 
