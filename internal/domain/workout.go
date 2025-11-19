@@ -7,10 +7,11 @@ type WorkOutRepo interface {
 	DeleteWorkout(id int) error
 }
 
+
 type Workout struct {
 	Id       int
 	Date     string
-	Type     string
+	Kind     string
 	Duration int
 	Notes    string
 }

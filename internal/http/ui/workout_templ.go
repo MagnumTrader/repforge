@@ -98,7 +98,7 @@ func WorkoutTableRow(wo domain.Workout) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var4 string
-		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(wo.Type)
+		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(wo.Kind)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/workout.templ`, Line: 35, Col: 17}
 		}
@@ -166,7 +166,7 @@ func WorkoutDetailsPartial(workout domain.Workout) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var8 string
-		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(workout.Type)
+		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(workout.Kind)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/workout.templ`, Line: 56, Col: 26}
 		}
@@ -304,7 +304,7 @@ func WorkoutFields(workout *domain.Workout) templ.Component {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var15 string
-		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(workout.Type)
+		templ_7745c5c3_Var15, templ_7745c5c3_Err = templ.JoinStringErrs(workout.Kind)
 		if templ_7745c5c3_Err != nil {
 			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/workout.templ`, Line: 100, Col: 65}
 		}

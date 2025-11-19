@@ -50,7 +50,7 @@ func TestWorkoutsPage(t *testing.T) {
 	// Add a workout
 	w := domain.Workout{
 		Date:     "2025-11-11",
-		Type:     "Swimming",
+		Kind:     "Swimming",
 		Duration: 50,
 		Notes:    "Pool session",
 	}
@@ -79,7 +79,7 @@ func TestWorkoutsPage(t *testing.T) {
 
 	// Verify workout appears in rendered HTML
 	if !strings.Contains(html, w.Date) ||
-		!strings.Contains(html, w.Type) ||
+		!strings.Contains(html, w.Kind) ||
 		!strings.Contains(html, "50") ||
 		!strings.Contains(html, w.Notes) {
 		t.Fatalf("Workout not found in rendered HTML: %v\nHTML:\n%s", w, html)

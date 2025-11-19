@@ -7,7 +7,7 @@ const (
 	HXCURRENTURL = "Hx-Current-Url"
 )
 
-func isHtmxRequest(ctx *gin.Context) bool {
+func IsHtmxRequest(ctx *gin.Context) bool {
 	value, ok := ctx.Request.Header[HXREQUEST]
 	if ok {
 		return value[0] == "true"

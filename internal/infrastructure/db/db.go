@@ -22,15 +22,13 @@ func NewDb() *Db {
 	}
 }
 
-// So this
-
 func (d *Db) GetWorkout(id int) (*domain.Workout, error) {
 	row := d.inner.QueryRow("select id, date, type, duration, notes  from workouts where id=?", id)
 
 	mo := &domain.Workout{
 		Id:       id,
 		Date:     "",
-		Type:     "",
+		Kind:     "",
 		Duration: 0,
 		Notes:    "",
 	}
@@ -38,12 +36,13 @@ func (d *Db) GetWorkout(id int) (*domain.Workout, error) {
 	row.Scan(
 		&mo.Id,
 		&mo.Date,
-		&mo.Type,
+		&mo.Kind,
 		&mo.Duration,
 		&mo.Notes,
 	)
 	return mo, nil
 }
+
 func (d *Db) GetAllWorkouts(userId int) ([]domain.Workout, error) {
 	rows, err := d.inner.Query("select id, date, type, duration, notes  from workouts")
 	if err != nil {
@@ -59,7 +58,7 @@ func (d *Db) GetAllWorkouts(userId int) ([]domain.Workout, error) {
 		err := rows.Scan(
 			&wo.Id,
 			&wo.Date,
-			&wo.Type,
+			&wo.Kind,
 			&wo.Duration,
 			&wo.Notes)
 
@@ -73,11 +72,12 @@ func (d *Db) GetAllWorkouts(userId int) ([]domain.Workout, error) {
 
 	return workouts, nil
 }
+
 func (d *Db) SaveWorkout(workout *domain.Workout) error {
 	row, err := d.inner.Exec("INSERT INTO workouts (date, duration, type, notes) VALUES (?, ?, ?, ?)",
 		workout.Date,
 		workout.Duration,
-		workout.Type,
+		workout.Kind,
 		workout.Notes,
 	)
 

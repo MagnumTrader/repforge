@@ -32,7 +32,7 @@ templ WorkoutTableRow(wo domain.Workout) {
         @NavButton(wo.Date, fmt.Sprintf("/workouts/%d", wo.Id))
     </td>
     <td>{ wo.Duration }</td>
-    <td>{ wo.Type }</td>
+    <td>{ wo.Kind }</td>
     <td class="table-buttons">
         <span>edit</span>
         <span 
@@ -53,7 +53,7 @@ templ WorkoutDetailsPartial(workout domain.Workout) {
     </tr>
     <tr>
         <th>Type</th>
-        <td>{ workout.Type }</td>
+        <td>{ workout.Kind }</td>
     </tr>
     <tr>
         <th>Duration (minutes)</th>
@@ -97,7 +97,7 @@ workout.Date = time.Now().Format("2006-01-02")
 </div>
 <div class="form-row">
     <label for="type">Type</label>
-    <input id="type" name="type" type="text" value={ workout.Type } required />
+    <input id="type" name="type" type="text" value={ workout.Kind } required />
 </div>
 <div class="form-row">
     <label for="note">Note</label>

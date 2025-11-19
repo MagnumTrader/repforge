@@ -5,24 +5,24 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/MagnumTrader/repforge/internal/domain"
 	"github.com/MagnumTrader/repforge/internal/http/ui"
+	"github.com/MagnumTrader/repforge/internal/services"
+
 	"github.com/gin-gonic/gin"
-	"github.com/gohugoio/hugo/config/services"
 )
 
 type workout struct {
-	service services.WorkoutService
+	service *services.WorkoutService
 }
 
-func NewWorkoutHandler(service services.WorkoutService) workout {
+func NewWorkoutHandler(service *services.WorkoutService) workout {
 	return workout{
 		service: service,
 	}
 
 }
 
-func (h *workout) WorkoutsListHandler(ctx *gin.Context) {
+func (h *workout) WorkoutsList(ctx *gin.Context) {
 	workouts, err := h.service.GetAll()
 	if err != nil {
 		slog.Error(err.Error())
@@ -31,18 +31,14 @@ func (h *workout) WorkoutsListHandler(ctx *gin.Context) {
 	}
 	template := ui.WorkOutListPartial(workouts)
 
-	if !isHtmxRequest(ctx) {
+	if !IsHtmxRequest(ctx) {
 		template = ui.Base(template)
 	}
 
 	template.Render(ctx.Request.Context(), ctx.Writer)
 }
 
-func (h *workout) healthyHandler(ctx *gin.Context) {
-	ctx.String(http.StatusOK, "this is my and this now changed")
-}
-
-func (h *workout) workoutDetails(ctx *gin.Context) {
+func (h *workout) WorkoutDetails(ctx *gin.Context) {
 	id := ctx.Param("id")
 	if id == "" {
 		ctx.Status(http.StatusInternalServerError)
@@ -56,22 +52,22 @@ func (h *workout) workoutDetails(ctx *gin.Context) {
 		return
 	}
 
-	workout, err := app.db.GetWorkout(parsedId)
+	workout, err := h.service.GetWorkout(parsedId)
 	if err != nil {
-		log.Println(err)
+		slog.Info("failed to get workout2", "error", err)
 		ctx.Status(http.StatusInternalServerError)
 		return
 	}
 
 	template := ui.WorkoutDetailsPartial(*workout)
-	if !isHtmxRequest(ctx) {
+	if !IsHtmxRequest(ctx) {
 		template = ui.Base(template)
 	}
 	template.Render(ctx.Request.Context(), ctx.Writer)
 }
 
-func (h *workout) WorkoutForm(ctx *gin.Context) {
-	if isHtmxRequest(ctx) {
+func (h *workout) FormNewWorkout(ctx *gin.Context) {
+	if IsHtmxRequest(ctx) {
 		// we should render the partial
 		template := ui.WorkoutForm(nil)
 		template.Render(ctx.Request.Context(), ctx.Writer)
@@ -92,7 +88,7 @@ func (h *workout) DeleteWorkout(ctx *gin.Context) {
 		ctx.Status(http.StatusInternalServerError)
 		return
 	}
-	err = app.db.DeleteWorkout(parsedId)
+	err = h.service.DeleteWorkout(parsedId)
 	if err != nil {
 		slog.Error("Error when deleting workout", "error", err)
 		ctx.Status(http.StatusInternalServerError)
@@ -103,33 +99,23 @@ func (h *workout) DeleteWorkout(ctx *gin.Context) {
 }
 
 // The handler should have its own request format, it has that here
+// This is for the post handling of that request
 func (h *workout) NewWorkout(ctx *gin.Context) {
 
-	workout := struct {
+	wo := struct {
 		Date     string `form:"date"  binding:"required"`
 		Duration int    `form:"duration"`
 		Type     string `form:"type" binding:"required"`
 		Note     string `form:"note" `
 	}{}
 
-	if err := ctx.ShouldBind(&workout); err != nil {
+	if err := ctx.ShouldBind(&wo); err != nil {
 		slog.Error("Failed to parse form", "Error:", err)
 		ctx.Status(http.StatusInternalServerError)
 		return
 	}
 
-	slog.Info("created entity", "Name: ", workout.Date)
-	slog.Info("", "email: ", workout.Note)
-
-	// here we should probablt have a service to the handler?
-	wo := domain.Workout{
-		Date:     workout.Date,
-		Type:     workout.Type,
-		Duration: workout.Duration,
-		Notes:    workout.Note,
-	}
-
-	err := app.db.SaveWorkout(&wo)
+	workout, err := h.service.CreateWorkout(wo.Date, wo.Type, wo.Note, wo.Duration)
 
 	if err != nil {
 		slog.Error("Failed to insert workout into DB", "Error:", err)
@@ -137,7 +123,6 @@ func (h *workout) NewWorkout(ctx *gin.Context) {
 		return
 	}
 
-	row := ui.WorkoutTableRow(wo)
+	row := ui.WorkoutTableRow(*workout)
 	row.Render(ctx.Request.Context(), ctx.Writer)
 }
-
