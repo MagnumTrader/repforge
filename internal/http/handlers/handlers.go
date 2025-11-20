@@ -14,9 +14,3 @@ func IsHtmxRequest(ctx *gin.Context) bool {
 	}
 	return false
 }
-
-func headerExist(ctx *gin.Context, header string) bool {
-	headers := ctx.Request.Header
-	_, ok := headers[header]
-	return ok
-}

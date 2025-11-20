@@ -1,12 +1,12 @@
 # repforge
 
 TODO:
-- [ ] Cleaning... 
-      Think about creating a service for the handler. the handler takes a service, 
-      that contains the repo and handles the business Logic,
 - [ ] Add edit workout screen ( same as new but populated with the current data)
 - [ ] More fields on workout, what is the flow of expanding the app?
-- [ ] Nicer font :)
+- [ ] Nicer font :) lets go with ubuntu font
+- [x] Cleaning... 
+      Think about creating a service for the handler. the handler takes a service, 
+      that contains the repo and handles the business Logic,
 - [x] Add delete button to list
 - [x] Add delete route for workout
 - [x] Add new workout screen
