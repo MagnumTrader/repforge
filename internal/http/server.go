@@ -2,7 +2,6 @@ package http
 
 import (
 	"fmt"
-	"log/slog"
 	"net/http"
 	"time"
 
@@ -18,7 +17,7 @@ import (
 func mainPage(ctx *gin.Context) {
 	var template templ.Component = ui.MainPage()
 	if !handlers.IsHtmxRequest(ctx) {
-		slog.Info("request came in", "context", ctx.Request)
+		// Fresh page load
 		template = ui.Base(template)
 	}
 	template.Render(ctx.Request.Context(), ctx.Writer)
