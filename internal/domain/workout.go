@@ -5,6 +5,7 @@ type WorkOutRepo interface {
 	GetAllWorkouts(userId int) ([]Workout, error)
 	SaveWorkout(workout *Workout) error
 	DeleteWorkout(id int) error
+	UpdateWorkout(workout *Workout) error
 }
 
 

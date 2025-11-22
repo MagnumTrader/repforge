@@ -2,6 +2,8 @@ package db
 
 import (
 	"database/sql"
+	"fmt"
+	"log/slog"
 
 	"github.com/MagnumTrader/repforge/internal/domain"
 	_ "github.com/mattn/go-sqlite3"
@@ -82,9 +84,9 @@ func (d *Db) SaveWorkout(workout *domain.Workout) error {
 	)
 
 	if err != nil {
-	  return err
+		return err
 	}
-	
+
 	// Sqlite3 supports this and we have autoincrement on The id
 	id, _ := row.LastInsertId()
 	workout.Id = int(id)
@@ -93,6 +95,33 @@ func (d *Db) SaveWorkout(workout *domain.Workout) error {
 }
 
 func (d *Db) DeleteWorkout(id int) error {
-	_, err := d.inner.Exec("delete from workouts where id = ?", id)
+	res, err := d.inner.Exec("delete from workouts where id = ?", id)
+	rows, err := res.RowsAffected()
+	// TODO: should return error when not found
+	if rows == 0 {
+		return fmt.Errorf("Zero records was updated")
+	}
+	slog.Info("delete request successfull", "Deleted rows", rows, "workout id", id)
 	return err
 }
+
+// UpdateWorkout implements domain.WorkOutRepo.
+func (d *Db) UpdateWorkout(workout *domain.Workout) error {
+	query := "UPDATE workouts SET date = ?, duration = ?, type = ?, notes = ? where id = ?"
+	rows, err := d.inner.Exec(query, 
+			&workout.Date,
+			&workout.Duration,
+			&workout.Kind,
+			&workout.Notes,
+			&workout.Id,
+	)
+
+	// NOTE: Only errors if db does not support rowsaffected (i think)
+	affected, _ := rows.RowsAffected()
+	if affected == 0 {
+		return fmt.Errorf("Zero records was updated")
+	}
+
+	return err
+}
+
