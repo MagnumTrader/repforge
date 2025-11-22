@@ -42,7 +42,7 @@ func (h *workout) WorkoutsList(ctx *gin.Context) {
 }
 
 func (h *workout) WorkoutDetails(ctx *gin.Context) {
-	workout, err := h.getWorkoutFromCtx(ctx)
+	workout, err := h.getWorkoutByCtxId(ctx)
 	if err != nil {
 		if errors.Is(err, ErrBadID) {
 			respondError(ctx, http.StatusBadRequest, InvalidWorkoutId, err)
@@ -63,7 +63,7 @@ func (h *workout) WorkoutDetails(ctx *gin.Context) {
 }
 
 func (h *workout) EditWorkoutForm(ctx *gin.Context) {
-	wo, err := h.getWorkoutFromCtx(ctx)
+	wo, err := h.getWorkoutByCtxId(ctx)
 
 	if err != nil {
 		if errors.Is(err, ErrBadID) {
@@ -78,7 +78,7 @@ func (h *workout) EditWorkoutForm(ctx *gin.Context) {
 
 	if IsHtmxRequest(ctx) {
 		// We should render the partial
-		template := ui.WorkoutForm(wo)
+		template := ui.WorkoutForm(wo, ui.EditForm)
 		template.Render(ctx.Request.Context(), ctx.Writer)
 		return
 	}
@@ -87,10 +87,54 @@ func (h *workout) EditWorkoutForm(ctx *gin.Context) {
 	ctx.Status(http.StatusNotFound)
 }
 
+func (h *workout) EditWorkout(ctx *gin.Context) {
+
+	wo := struct {
+		Date     string `form:"date"  binding:"required"`
+		Duration int    `form:"duration"`
+		Type     string `form:"type" binding:"required"`
+		Note     string `form:"note" `
+	}{}
+
+	if err := ctx.ShouldBind(&wo); err != nil {
+		respondError(ctx, http.StatusBadRequest, "Invalid input", err)
+		return
+	}
+
+	id, err := h.parseId(ctx)
+	if err != nil {
+		respondError(ctx, http.StatusInternalServerError, InvalidWorkoutId, err)
+	}
+
+	// NOTE: Maybe use DTO later
+	workout := &domain.Workout{
+		Id:       id,
+		Date:     wo.Date,
+		Kind:     wo.Type,
+		Duration: wo.Duration,
+		Notes:    wo.Note,
+	}
+
+	err = h.service.EditWorkout(workout)
+
+	if err != nil {
+		respondError(ctx, http.StatusInternalServerError, "Failed to update workout", err)
+		return
+	}
+
+	// Maybe send a refresh request dont remember whats its called?
+
+	// TODO: we should have a way of updating the list that we are already lookin at
+	// This is actually a reason to have its own page for the update
+	// or just rerender the entire list, but do i have to fetch from the DB?
+	// Is that even an issue?
+	ctx.String(http.StatusOK, "")
+}
+
 func (h *workout) NewWorkoutForm(ctx *gin.Context) {
 	if IsHtmxRequest(ctx) {
 		// we should render the partial
-		template := ui.WorkoutForm(nil)
+		template := ui.WorkoutForm(nil, ui.NewForm)
 		setHtml200(ctx)
 		template.Render(ctx.Request.Context(), ctx.Writer)
 		return
@@ -98,6 +142,36 @@ func (h *workout) NewWorkoutForm(ctx *gin.Context) {
 
 	// NOTE: maybe support standalone screen later
 	ctx.Status(http.StatusNotFound)
+}
+
+// The handler should have its own request format, it has that here
+// This is for the post handling of that request
+func (h *workout) NewWorkout(ctx *gin.Context) {
+
+	wo := struct {
+		Date     string `form:"date"  binding:"required"`
+		Duration int    `form:"duration"`
+		Type     string `form:"type" binding:"required"`
+		Note     string `form:"note" `
+	}{}
+
+	if err := ctx.ShouldBind(&wo); err != nil {
+		respondError(ctx, http.StatusBadRequest, InvalidInput, err)
+		return
+	}
+
+	workout, err := h.service.CreateWorkout(wo.Date, wo.Type, wo.Note, wo.Duration)
+
+	if err != nil {
+		respondError(ctx, http.StatusInternalServerError, InvalidInput, err)
+		slog.Error("Failed to insert workout into DB", "Error:", err)
+		ctx.Status(http.StatusInternalServerError)
+		return
+	}
+
+	row := ui.WorkoutTableRow(*workout)
+	setHtml200(ctx)
+	row.Render(ctx.Request.Context(), ctx.Writer)
 }
 
 func (h *workout) DeleteWorkout(ctx *gin.Context) {
@@ -116,36 +190,6 @@ func (h *workout) DeleteWorkout(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
-// The handler should have its own request format, it has that here
-// This is for the post handling of that request
-func (h *workout) NewWorkout(ctx *gin.Context) {
-
-	wo := struct {
-		Date     string `form:"date"  binding:"required"`
-		Duration int    `form:"duration"`
-		Type     string `form:"type" binding:"required"`
-		Note     string `form:"note" `
-	}{}
-
-	if err := ctx.ShouldBind(&wo); err != nil {
-		respondError(ctx, http.StatusBadRequest, "Invalid input", err)
-		return
-	}
-
-	workout, err := h.service.CreateWorkout(wo.Date, wo.Type, wo.Note, wo.Duration)
-
-	if err != nil {
-		respondError(ctx, http.StatusInternalServerError, "Invalid input", err)
-		slog.Error("Failed to insert workout into DB", "Error:", err)
-		ctx.Status(http.StatusInternalServerError)
-		return
-	}
-
-	row := ui.WorkoutTableRow(*workout)
-	setHtml200(ctx)
-	row.Render(ctx.Request.Context(), ctx.Writer)
-}
-
 //============================ HELPERS ============================
 
 var (
@@ -156,6 +200,7 @@ var (
 
 	// Messages
 	InvalidWorkoutId    = "invalid workout Id"
+	InvalidInput        = "Invalid input"
 	FailedToGetWorkout  = "failed to retrieve workout"
 	FailedToGetWorkouts = "failed to retrieve workouts"
 )
@@ -164,7 +209,7 @@ var (
 // The errors can indicate where the function encountered an error.
 // ID fetching or parsing
 // or fetching from the service
-func (h *workout) getWorkoutFromCtx(ctx *gin.Context) (*domain.Workout, error) {
+func (h *workout) getWorkoutByCtxId(ctx *gin.Context) (*domain.Workout, error) {
 	id, err := h.parseId(ctx)
 
 	if err != nil {
