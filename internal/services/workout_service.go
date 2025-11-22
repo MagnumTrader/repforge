@@ -27,6 +27,9 @@ func (s *WorkoutService) CreateWorkout(date, kind, note string, duration int) (*
 	return workout, nil
 }
 
+func (s *WorkoutService) EditWorkout(workout *domain.Workout) error {
+	return s.repo.UpdateWorkout(workout)
+}
 func (s *WorkoutService) DeleteWorkout(id int) error {
 	return s.repo.DeleteWorkout(id)
 }
