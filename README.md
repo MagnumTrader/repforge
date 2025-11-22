@@ -1,7 +1,26 @@
 # repforge
 
 TODO:
+I was actually thinking about something the other day
+
+but what was it,
+
+
+lets go back to basics?
+
 - [ ] Add edit workout screen ( same as new but populated with the current data)
+      Document the process of how we best do it
+      
+      1. Handler should have function for workouts/:id/edit
+      2. UI Template for the service to render the overlay
+      3. enter data
+      4. Update request is sent to workouts/:id
+      5. collect that data and push it throught the service
+      6. write to db
+      7. return success
+
+- [ ] Add html content type function and return them from functions
+- [ ] Add tests for service..
 - [ ] More fields on workout, what is the flow of expanding the app?
 - [ ] Nicer font :) lets go with ubuntu font
 - [x] Cleaning... 
