@@ -8,7 +8,6 @@ type WorkOutRepo interface {
 	UpdateWorkout(workout *Workout) error
 }
 
-
 type Workout struct {
 	Id       int
 	Date     string

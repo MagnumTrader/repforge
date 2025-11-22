@@ -8,7 +8,12 @@ but what was it,
 
 lets go back to basics?
 
-- [ ] Add edit workout screen ( same as new but populated with the current data)
+- [ ] Nicer font :) lets go with ubuntu font
+- [ ] Add tests for service..
+- [ ] Add Exercises which is a subcomponent of every workout
+- [ ] More fields on workout, what is the flow of expanding the app?
+- [ ] Add ctx in db calls and service?
+- [x] Add edit workout screen ( same as new but populated with the current data)
       Document the process of how we best do it
       
       1. Handler should have function for workouts/:id/edit
@@ -18,10 +23,7 @@ lets go back to basics?
       5. collect that data and push it throught the service
       6. write to db
       7. return success
-- [ ] Add html content type function and return them from functions
-- [ ] Add tests for service..
-- [ ] More fields on workout, what is the flow of expanding the app?
-- [ ] Nicer font :) lets go with ubuntu font
+- [x] Add html content type function and return them from functions
 - [x] Cleaning... 
       Think about creating a service for the handler. the handler takes a service, 
       that contains the repo and handles the business Logic,
