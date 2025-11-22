@@ -13,8 +13,10 @@ func RegisterWorkoutRoutes(r *gin.Engine, service *services.WorkoutService) {
 
 	grp.GET("", handler.WorkoutsList)
 	grp.GET("/:id", handler.WorkoutDetails)
+	grp.GET("/:id/edit", handler.EditWorkoutForm) // this should return the form
+	grp.PATCH("/:id", handler.WorkoutDetails) // form send here
 	grp.DELETE("/:id", handler.DeleteWorkout)
-	grp.GET("/new", handler.FormNewWorkout)
+	grp.GET("/new", handler.NewWorkoutForm)
 	grp.POST("/new", handler.NewWorkout)
 }
 
