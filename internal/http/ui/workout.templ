@@ -19,7 +19,11 @@ templ WorkOutListPartial(workouts []domain.Workout) {
             }
         </tbody>
     </table>
-    <span hx-get="/workouts/new" class="link" hx-target="#overlay-content" _="on click remove .hidden from #overlay">
+    <span 
+    hx-get="/workouts/new" 
+    class="link" 
+    hx-target="#overlay-content" 
+    _="on click remove .hidden from #overlay">
         Add
         workout
     </span>
@@ -34,12 +38,18 @@ templ WorkoutTableRow(wo domain.Workout) {
     <td>{ wo.Duration }</td>
     <td>{ wo.Kind }</td>
     <td class="table-buttons">
-        <span>edit</span>
+        <span
+        hx-get={fmt.Sprintf("/workouts/edit/%d", wo.Id)}
+        hx-target="#overlay-content" 
+        _="on click remove .hidden from #overlay">
+            edit
+        </span>
         <span 
         hx-delete={fmt.Sprintf("/workouts/%d", wo.Id)}
         hx-target="closest tr"
-        hx-swap="outerHTML"
-        >delete</span>
+        hx-swap="outerHTML">
+            delete
+        </span>
     </td>
 </tr>
 }
@@ -66,26 +76,48 @@ templ WorkoutDetailsPartial(workout domain.Workout) {
 </table>
 }
 
-// TODO:
-// Can we make this generic without the target thing? because right now
-// its really dependant on the overlay and popup style
-templ WorkoutForm(workout *domain.Workout) {
-<form id="workout-form" hx-post="/workouts/new" hx-target="#workout-list" hx-swap="beforeend" _="on htmx:afterRequest
+type FormType = int
+
+const (
+    EditForm FormType = iota
+    NewForm 
+)
+
+templ WorkoutForm(workout *domain.Workout, newOrEdit FormType) {
+{{
+// Create different attributes dependant on the type of form
+// I can actually target the body ( dont remember the tag name should probably have consts)
+// OR an oob swap for the overlay, defined here!
+var attributes templ.Attributes = make(templ.Attributes, 0)
+var buttonText string
+switch newOrEdit {
+    case EditForm: 
+        attributes["hx-put"] = fmt.Sprintf("/workouts/%d", workout.Id)
+        buttonText = "Update"
+    case NewForm: 
+        attributes["hx-post"] = "/workouts/new"
+        attributes["hx-target"] = "#workout-list"
+        attributes["hx-swap"] = "beforeend"
+        buttonText = "Create"
+}
+}}
+<form id="workout-form" {attributes...} 
+    _="on htmx:afterRequest
         remove me 
         then add .hidden to #overlay
     end">
     @WorkoutFields(workout)
-    <button type="submit">Create</button>
+    <button type="submit">{buttonText}</button>
     <button type="button" _="on click remove #workout-form then add .hidden to #overlay">Cancel</button>
 </form>
 }
 
 templ WorkoutFields(workout *domain.Workout) {
 {{
-if workout == nil {
-workout = &domain.Workout{}
-workout.Date = time.Now().Format("2006-01-02")
-}
+    if workout == nil {
+        workout = &domain.Workout{}
+        workout.Date = time.Now().Format("2006-01-02")
+    }
 }}
 <div class="form-row">
     <label for="date">Date</label>
