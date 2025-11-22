@@ -18,7 +18,6 @@ lets go back to basics?
       5. collect that data and push it throught the service
       6. write to db
       7. return success
-
 - [ ] Add html content type function and return them from functions
 - [ ] Add tests for service..
 - [ ] More fields on workout, what is the flow of expanding the app?

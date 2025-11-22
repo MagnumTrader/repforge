@@ -33,6 +33,8 @@ func (h *workout) WorkoutsList(ctx *gin.Context) {
 	}
 	template := ui.WorkOutListPartial(workouts)
 
+	setHtml200(ctx)
+
 	if !IsHtmxRequest(ctx) {
 		template = ui.Base(template)
 	}
@@ -51,6 +53,9 @@ func (h *workout) WorkoutDetails(ctx *gin.Context) {
 	}
 
 	template := ui.WorkoutDetailsPartial(*workout)
+
+	setHtml200(ctx)
+
 	if !IsHtmxRequest(ctx) {
 		template = ui.Base(template)
 	}
@@ -69,6 +74,8 @@ func (h *workout) EditWorkoutForm(ctx *gin.Context) {
 		return
 	}
 
+	setHtml200(ctx)
+
 	if IsHtmxRequest(ctx) {
 		// We should render the partial
 		template := ui.WorkoutForm(wo)
@@ -84,6 +91,7 @@ func (h *workout) NewWorkoutForm(ctx *gin.Context) {
 	if IsHtmxRequest(ctx) {
 		// we should render the partial
 		template := ui.WorkoutForm(nil)
+		setHtml200(ctx)
 		template.Render(ctx.Request.Context(), ctx.Writer)
 		return
 	}
@@ -134,6 +142,7 @@ func (h *workout) NewWorkout(ctx *gin.Context) {
 	}
 
 	row := ui.WorkoutTableRow(*workout)
+	setHtml200(ctx)
 	row.Render(ctx.Request.Context(), ctx.Writer)
 }
 
@@ -143,11 +152,11 @@ var (
 	// Errors
 
 	// The id provided is missing or couldnt be parsed
-	ErrBadID         = errors.New("invalid Id")
+	ErrBadID = errors.New("invalid Id")
 
 	// Messages
-	InvalidWorkoutId = "invalid workout Id"
-	FailedToGetWorkout = "failed to retrieve workout"
+	InvalidWorkoutId    = "invalid workout Id"
+	FailedToGetWorkout  = "failed to retrieve workout"
 	FailedToGetWorkouts = "failed to retrieve workouts"
 )
 

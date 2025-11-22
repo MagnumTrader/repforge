@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"log/slog"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,4 +25,11 @@ func IsHtmxRequest(ctx *gin.Context) bool {
 func respondError(ctx *gin.Context, status int, msg string, err error) {
 	slog.Error(msg, "error", err)
 	ctx.String(status, msg)
+}
+
+// Sets the content type to text/html 
+// and response to be 200
+func setHtml200(ctx *gin.Context) {
+	ctx.Header("Content-Type", "text/html")
+	ctx.Status(http.StatusOK)
 }
