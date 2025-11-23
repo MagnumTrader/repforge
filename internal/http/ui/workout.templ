@@ -108,7 +108,10 @@ switch newOrEdit {
     end">
     @WorkoutFields(workout)
     <button type="submit">{buttonText}</button>
-    <button type="button" _="on click remove #workout-form then add .hidden to #overlay">Cancel</button>
+    <button type="button" 
+    _="on click remove #workout-form then add .hidden to #overlay">
+        Cancel
+    </button>
 </form>
 }
 
@@ -133,6 +136,6 @@ templ WorkoutFields(workout *domain.Workout) {
 </div>
 <div class="form-row">
     <label for="note">Note</label>
-    <textarea id="note" name="note" type="text" rows="4" value={ workout.Notes }></textarea>
+    <textarea id="note" name="note" type="text" rows="4">{workout.Notes}</textarea>
 </div>
 }
