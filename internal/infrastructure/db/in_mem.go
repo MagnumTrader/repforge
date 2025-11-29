@@ -20,7 +20,7 @@ func (d *InMem) GetAllWorkouts(userId int) ([]domain.Workout, error) {
 }
 // TODO: Implement this
 func (d *InMem) SaveWorkout(workout domain.Workout) error {
-	return nil
+	panic("Not implemented")
 }
 
 var workouts = []domain.Workout{
