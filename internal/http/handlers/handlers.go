@@ -37,7 +37,7 @@ func setHtml200(ctx *gin.Context) {
 }
 
 // Parse the id of the request, MAY be more general later if we have structure for system wide Id's
-func (h *workout) parseId(ctx *gin.Context) (int, error) {
+func parseId(ctx *gin.Context) (int, error) {
 	idString := ctx.Param("id")
 	if idString == "" {
 		return 0, fmt.Errorf("%w: missing", ErrBadID)

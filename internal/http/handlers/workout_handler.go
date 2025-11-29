@@ -99,7 +99,7 @@ func (h *workout) EditWorkout(ctx *gin.Context) {
 		return
 	}
 
-	id, err := h.parseId(ctx)
+	id, err := parseId(ctx)
 	if err != nil {
 		respondError(ctx, http.StatusInternalServerError, InvalidWorkoutId, err)
 	}
@@ -174,7 +174,7 @@ func (h *workout) NewWorkout(ctx *gin.Context) {
 
 func (h *workout) DeleteWorkout(ctx *gin.Context) {
 
-	id, err := h.parseId(ctx)
+	id, err := parseId(ctx)
 	if err != nil {
 		respondError(ctx, http.StatusBadRequest, InvalidWorkoutId, err)
 		return
@@ -208,7 +208,7 @@ var (
 // ID fetching or parsing
 // or fetching from the service
 func (h *workout) getWorkoutByCtxId(ctx *gin.Context) (*domain.Workout, error) {
-	id, err := h.parseId(ctx)
+	id, err := parseId(ctx)
 
 	if err != nil {
 		return nil, err
