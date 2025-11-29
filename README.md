@@ -1,9 +1,27 @@
-# repforge
+# Repforge
 
 TODO:
-I was actually thinking about something the other day
+Wow for adjusting an entity
+- Do the change in domain Entity
+- Db migrations
+- Repo implementation update to fetch new fields
+- Service arguments for creating/filtering if needed
+- Rendering if applicable
 
-but what was it,
+- Domain Entity - add/modify field
+- Database migration (ALTER TABLE)
+- Repo - update SELECT/INSERT/UPDATE queries
+- Service - add validation/defaults if needed
+- Service tests - update fixtures
+- Handler - parse new field from request (if user-provided)
+- UI - add form input or display field
+
+
+--- No footshooting guide:
+- Did you run templ generate after changing .templ files? ( Air handles this )
+- Did you add the new field to ALL queries (SELECT, INSERT, UPDATE)?
+- Did you update in_mem.go for local testing?
+- Did existing tests break? (good - they caught something!)
 
 
 lets go back to basics?
@@ -13,6 +31,7 @@ lets go back to basics?
 - [ ] Add ctx in db calls and service?
 - [ ] workout exercise should have reps, 
       Sets then have a workout that we relate that rep and weight/time to 
+- [ ] Move to generic repo for entities
 - [x] Nicer font :) lets go with ubuntu font
 - [x] Add edit workout screen ( same as new but populated with the current data)
       Document the process of how we best do it

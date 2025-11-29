@@ -71,7 +71,7 @@ var exercises = []domain.Exercise {
 func (d *InMem) GetExercise(id int) (*domain.Exercise, error) {
 
 	if id != 1 {
-		panic("no exercise like that")
+		return nil, fmt.Errorf("No exercise with id %d", id)
 	}
 
 	return &exercises[0], nil
@@ -96,6 +96,6 @@ func (d *InMem) DeleteExercise(id int) error {
 	panic("not implemented")
 }
 
-func (d *InMem) UpdateExercise(workout *domain.Exercise) error {
+func (d *InMem) UpdateExercise(exercise *domain.Exercise) error {
 	panic("not implemented")
 }

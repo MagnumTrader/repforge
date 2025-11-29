@@ -36,9 +36,7 @@ func (e *exerciseHandler) ExerciseDetails(c *gin.Context) {
 }
 
 func (e *exerciseHandler) ExerciseList(c *gin.Context) {
-	fmt.Println("hello")
 	all, _ := e.service.GetAll()
-
 
 	var response strings.Builder
 	for _, e := range all {
