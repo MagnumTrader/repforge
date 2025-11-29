@@ -59,10 +59,11 @@ var workouts = []domain.Workout{
 	},
 }
 
-var exercise = []domain.Exercise {
+var exercises = []domain.Exercise {
 	{
 		Id:   1,
-		Name: "Test Exercise",
+		Name: "Leg Press",
+		Category: domain.CategoryLegs,
 	},
 }
 
@@ -73,14 +74,20 @@ func (d *InMem) GetExercise(id int) (*domain.Exercise, error) {
 		panic("no exercise like that")
 	}
 
-	return &exercise[0], nil
+	return &exercises[0], nil
 	
 }
 func (d *InMem) GetAllExercise(userId int) ([]domain.Exercise, error) {
-	return exercise, nil
+	return exercises, nil
 }
 func (d *InMem) SaveExercise(exercise *domain.Exercise) error {
-	panic("not implemented")
+	var maxId int
+	for _, e := range exercises {
+		maxId = max(maxId, e.Id)
+	}
+	exercise.Id = maxId + 1
+	exercises = append(exercises, *exercise)
+	return nil
 }
 func (d *InMem) DeleteExercise(id int) error {
 	panic("not implemented")

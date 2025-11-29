@@ -26,4 +26,6 @@ func RegisterExerciseRoutes(r *gin.Engine, service *services.ExerciseService)() 
 	grp := r.Group("/exercises")
 
 	grp.GET("", handler.ExerciseList)
+	grp.GET("/:id", handler.ExerciseDetails)
+	grp.POST("/new", handler.NewExercise)
 }
