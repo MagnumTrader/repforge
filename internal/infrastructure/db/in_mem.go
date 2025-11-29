@@ -5,6 +5,10 @@ import (
 	"github.com/MagnumTrader/repforge/internal/domain"
 )
 
+func NewInMem() *InMem {
+	return &InMem{}
+}
+
 type InMem struct{}
 
 func (d *InMem) GetWorkout(id int) (*domain.Workout, error) {
@@ -18,6 +22,7 @@ func (d *InMem) GetWorkout(id int) (*domain.Workout, error) {
 func (d *InMem) GetAllWorkouts(userId int) ([]domain.Workout, error) {
 	return workouts, nil
 }
+
 // TODO: Implement this
 func (d *InMem) SaveWorkout(workout domain.Workout) error {
 	panic("Not implemented")
@@ -52,4 +57,34 @@ var workouts = []domain.Workout{
 		Duration: 45,
 		Notes:    "",
 	},
+}
+
+var exercise = []domain.Exercise {
+	{
+		Id:   1,
+		Name: "Test Exercise",
+	},
+}
+
+// Exercise repo impl
+func (d *InMem) GetExercise(id int) (*domain.Exercise, error) {
+
+	if id != 1 {
+		panic("no exercise like that")
+	}
+
+	return &exercise[0], nil
+	
+}
+func (d *InMem) GetAllExercise(userId int) ([]domain.Exercise, error) {
+	return exercise, nil
+}
+func (d *InMem) SaveExercise(exercise *domain.Exercise) error {
+	panic("not implemented")
+}
+func (d *InMem) DeleteExercise(id int) error {
+	panic("not implemented")
+}
+func (d *InMem) UpdateExercise(workout *domain.Exercise) error {
+	panic("not implemented")
 }

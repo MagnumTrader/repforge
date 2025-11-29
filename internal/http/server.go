@@ -33,9 +33,13 @@ func GetRouter() *gin.Engine {
 
 	r.Static("/static", "./internal/http/static")
 
-	db := db.NewDb()
-	service := services.NewWorkoutService(db)
-	routes.RegisterWorkoutRoutes(r, service)
+	sqlDb := db.NewDb()
+	workoutService := services.NewWorkoutService(sqlDb)
+	routes.RegisterWorkoutRoutes(r, workoutService)
+
+	mem := db.NewInMem()
+	exerciseService := services.NewExerciseService(mem)
+	routes.RegisterExerciseRoutes(r, exerciseService)
 
 	r.GET("/", mainPage)
 	r.GET("/health", healthyHandler)

@@ -20,3 +20,10 @@ func RegisterWorkoutRoutes(r *gin.Engine, service *services.WorkoutService) {
 	grp.DELETE("/:id", handler.DeleteWorkout)
 }
 
+func RegisterExerciseRoutes(r *gin.Engine, service *services.ExerciseService)()  {
+	handler := handlers.NewExerciseHandler(service)
+
+	grp := r.Group("/exercises")
+
+	grp.GET("", handler.ExerciseList)
+}
