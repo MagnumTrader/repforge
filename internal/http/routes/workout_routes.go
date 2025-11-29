@@ -14,6 +14,9 @@ func RegisterWorkoutRoutes(r *gin.Engine, service *services.WorkoutService) {
 	grp.GET("", handler.WorkoutsList)
 	grp.GET("/:id", handler.WorkoutDetails)
 	grp.PUT("/:id", handler.EditWorkout)
+	// TODO: Edit and new have dependencies in the templ file
+	// where they show the overlay. Overlay may instead be an oob swap
+	// OR we can give a redirect to another screen or replace content
 	grp.GET("/edit/:id", handler.EditWorkoutForm)
 	grp.GET("/new", handler.NewWorkoutForm)
 	grp.POST("/new", handler.NewWorkout)

@@ -6,45 +6,43 @@
         "wdth" 100;
 }
 * {
-margin: 0;
-padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 html,
 body {
-height: 100vh;
-overflow: hidden;
+    height: 100vh;
+    overflow: hidden;
 }
 
 body {
-display: grid;
-grid-template-rows: auto 1fr;
-/* nav takes what it needs, main fills rest */
+    display: grid;
+    grid-template-rows: auto 1fr;
+    /* nav takes what it needs, main fills rest */
 }
 
 nav {
-display: flex;
-justify-content: space-between;
-padding: 0.2rem;
-padding-left: 1rem;
-padding-right: 0.5rem;
-background-color: rgb(100, 100, 100);
+    display: flex;
+    justify-content: space-between;
+    padding: 0.2rem;
+    padding-left: 1rem;
+    padding-right: 0.5rem;
+    background-color: rgb(100, 100, 100);
 }
 
 main {
-/* no height needed - grid handles it */
-overflow: auto;
-padding: 0.7rem;
-/* allows scrolling inside main if needed */
+    /* no height needed - grid handles it */
+    overflow: auto;
+    padding: 0.7rem;
+    /* allows scrolling inside main if needed */
 }
-content: attr(field);
-}
-}
+
+
 td {
-background-color: red;
-text-align: center;
-border-bottom: dashed;
-border-bottom-width: 1px;
+    text-align: center;
+    border-bottom: dashed;
+    border-bottom-width: 1px;
 }
 
 a {
@@ -58,9 +56,6 @@ color: blanchedalmond;
 margin-left: 0.5rem;
 }
 }
-
-
-
 
 .listwrapper {
 box-sizing: border-box;
@@ -84,7 +79,7 @@ justify-self: center;
 }
 
 table {
-width: 80%;
+width: 60%;
 }
 
 a:hover,
@@ -183,8 +178,7 @@ visibility: visible;
 }
 
 .table-buttons {
-display: flex;
-gap: 5px;
+    text-align: end;
 }
 .table-buttons span {
     &:hover {

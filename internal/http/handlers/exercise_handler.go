@@ -3,8 +3,8 @@ package handlers
 import (
 	"fmt"
 	"net/http"
-	"strings"
 
+	"github.com/MagnumTrader/repforge/internal/http/ui"
 	"github.com/MagnumTrader/repforge/internal/services"
 	"github.com/gin-gonic/gin"
 )
@@ -36,13 +36,21 @@ func (e *exerciseHandler) ExerciseDetails(c *gin.Context) {
 }
 
 func (e *exerciseHandler) ExerciseList(c *gin.Context) {
-	all, _ := e.service.GetAll()
 
-	var response strings.Builder
-	for _, e := range all {
-		response.WriteString(fmt.Sprintf("Id: %d Name: %s, Category: %s\n", e.Id, e.Name, e.Category))
+	all, err := e.service.GetAll()
+
+	if err != nil {
+		respondError(c, http.StatusInternalServerError, "Failed to fetch exercises", err)
+		return
 	}
-	c.Writer.Write([]byte(response.String()))
+
+	setHtml200(c)
+
+	template := ui.ExerciseListPartial(all)
+	if !IsHtmxRequest(c) {
+		template = ui.Base(template)
+	}
+	template.Render(c.Request.Context(), c.Writer)
 }
 
 func (e *exerciseHandler) NewExercise(c *gin.Context) {

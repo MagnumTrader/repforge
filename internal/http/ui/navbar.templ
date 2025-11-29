@@ -5,8 +5,8 @@ templ NavBar() {
         <div id="navbuttons">
             @NavButton("Home", "/")
             @NavButton("Workouts", "/workouts")
+            @NavButton("Exercises", "/exercises")
         </div>
-        <span id="time">Time will tell</span>
     </nav>
 }
 
@@ -16,8 +16,6 @@ templ NavButton(label string, url string) {
         attrs["hx-push-url"] = url
     }
     }}
-    {{attrs["another-attributew"] = 123456}}
-
     <span 
         class="navbutton"
         hx-get={url}
