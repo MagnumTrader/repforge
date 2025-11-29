@@ -65,17 +65,22 @@ var exercises = []domain.Exercise {
 		Name: "Leg Press",
 		Category: domain.CategoryLegs,
 	},
+	{
+		Id:   2,
+		Name: "Bench Press",
+		Category: domain.CategoryChest,
+	},
 }
 
 // Exercise repo impl
 func (d *InMem) GetExercise(id int) (*domain.Exercise, error) {
-
-	if id != 1 {
-		return nil, fmt.Errorf("No exercise with id %d", id)
+	for _, ex := range exercises {
+		if ex.Id == id {
+			return &ex, nil
+		}
 	}
 
-	return &exercises[0], nil
-	
+	return nil, fmt.Errorf("No exercise with id %d", id)
 }
 
 func (d *InMem) GetAllExercise(userId int) ([]domain.Exercise, error) {
