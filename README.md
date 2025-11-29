@@ -8,14 +8,14 @@ but what was it,
 
 lets go back to basics?
 
-- [ ] Add tests for service..
 - [ ] Add Exercises which is a subcomponent of every workout
-- [ ] More fields on workout, what is the flow of expanding the app?
+- [ ] Add tests for service..
 - [ ] Add ctx in db calls and service?
+- [ ] workout exercise should have reps, 
+      Sets then have a workout that we relate that rep and weight/time to 
 - [x] Nicer font :) lets go with ubuntu font
 - [x] Add edit workout screen ( same as new but populated with the current data)
       Document the process of how we best do it
-      
       1. Handler should have function for workouts/:id/edit
       2. UI Template for the service to render the overlay
       3. enter data

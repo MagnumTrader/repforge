@@ -77,9 +77,11 @@ func (d *InMem) GetExercise(id int) (*domain.Exercise, error) {
 	return &exercises[0], nil
 	
 }
+
 func (d *InMem) GetAllExercise(userId int) ([]domain.Exercise, error) {
 	return exercises, nil
 }
+
 func (d *InMem) SaveExercise(exercise *domain.Exercise) error {
 	var maxId int
 	for _, e := range exercises {
@@ -89,9 +91,11 @@ func (d *InMem) SaveExercise(exercise *domain.Exercise) error {
 	exercises = append(exercises, *exercise)
 	return nil
 }
+
 func (d *InMem) DeleteExercise(id int) error {
 	panic("not implemented")
 }
+
 func (d *InMem) UpdateExercise(workout *domain.Exercise) error {
 	panic("not implemented")
 }
