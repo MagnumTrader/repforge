@@ -26,7 +26,6 @@ Wow for adjusting an entity
 lets go back to basics?
 
 # Todos
-- [x] Deletion of exercises
 - [ ] Exercise form
 - [ ] Edit exercise
 - [ ] New Exercise
@@ -37,6 +36,7 @@ lets go back to basics?
 - [ ] Add ctx in db calls and service?
 - [ ] add Sets (number of reps + weights of exercises) then have a workout that we relate that rep and weight/time to 
 - [ ] Move to generic repo for entities
+- [x] Deletion of exercises
 - [x] Exercise details
 - [x] Exercise objects added
 - [x] List of exercise route
