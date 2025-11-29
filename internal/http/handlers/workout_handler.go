@@ -2,10 +2,8 @@ package handlers
 
 import (
 	"errors"
-	"fmt"
 	"log/slog"
 	"net/http"
-	"strconv"
 
 	"github.com/MagnumTrader/repforge/internal/domain"
 	"github.com/MagnumTrader/repforge/internal/http/ui"
@@ -224,17 +222,3 @@ func (h *workout) getWorkoutByCtxId(ctx *gin.Context) (*domain.Workout, error) {
 	return wo, nil
 }
 
-// Parse the id of the request, MAY be more general later if we have structure for system wide Id's
-func (h *workout) parseId(ctx *gin.Context) (int, error) {
-	idString := ctx.Param("id")
-	if idString == "" {
-		return 0, fmt.Errorf("%w: missing", ErrBadID)
-	}
-
-	id, err := strconv.Atoi(idString)
-
-	if err != nil {
-		return 0, fmt.Errorf("%w: %s", ErrBadID, idString)
-	}
-	return id, nil
-}

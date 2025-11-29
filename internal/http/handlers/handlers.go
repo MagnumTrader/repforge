@@ -1,8 +1,10 @@
 package handlers
 
 import (
+	"fmt"
 	"log/slog"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -32,4 +34,19 @@ func respondError(ctx *gin.Context, status int, msg string, err error) {
 func setHtml200(ctx *gin.Context) {
 	ctx.Header("Content-Type", "text/html")
 	ctx.Status(http.StatusOK)
+}
+
+// Parse the id of the request, MAY be more general later if we have structure for system wide Id's
+func (h *workout) parseId(ctx *gin.Context) (int, error) {
+	idString := ctx.Param("id")
+	if idString == "" {
+		return 0, fmt.Errorf("%w: missing", ErrBadID)
+	}
+
+	id, err := strconv.Atoi(idString)
+
+	if err != nil {
+		return 0, fmt.Errorf("%w: %s", ErrBadID, idString)
+	}
+	return id, nil
 }
