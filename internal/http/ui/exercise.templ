@@ -1,0 +1,134 @@
+package ui
+
+import "github.com/MagnumTrader/repforge/internal/domain"
+import "fmt"
+import "time"
+
+templ ExerciseListPartial(exercises []domain.Exercise) {
+<div class="listwrapper">
+    <h1>List of Exercises </h1>
+    <table>
+        <thead>
+            <th>Date</th>
+            <th>Duration</th>
+            <th>Type</th>
+        </thead>
+        <tbody id="Exercise-list">
+            for _, ex := range exercises {
+            @ExerciseTableRow(ex)
+            }
+        </tbody>
+    </table>
+    <span 
+    hx-get="/Exercises/new" 
+    class="link" 
+    hx-target="#overlay-content" 
+    _="on click remove .hidden from #overlay">
+        Add
+        Exercise
+    </span>
+</div>
+}
+
+templ ExerciseTableRow(exercise domain.Exercise) {
+<tr>
+    <td>
+        @NavButton(exercise.Date, fmt.Sprintf("/Exercises/%d", exercise.Id))
+    </td>
+    <td>{ exercise.Duration }</td>
+    <td>{ exercise.Kind }</td>
+    <td class="table-buttons">
+        <span
+        hx-get={fmt.Sprintf("/Exercises/edit/%d", exercise.Id)}
+        hx-target="#overlay-content" 
+        _="on click remove .hidden from #overlay">
+            edit
+        </span>
+        <span 
+        hx-delete={fmt.Sprintf("/Exercises/%d", exercise.Id)}
+        hx-target="closest tr"
+        hx-swap="outerHTML">
+            delete
+        </span>
+    </td>
+</tr>
+}
+
+templ ExerciseDetailsPartial(exercise domain.Exercise) {
+<h1>Exercise Details</h1>
+<table>
+    <tr>
+        <th>Date</th>
+        <td>{ exercise.Date }</td>
+    </tr>
+    <tr>
+        <th>Type</th>
+        <td>{ exercise.Kind }</td>
+    </tr>
+    <tr>
+        <th>Duration (minutes)</th>
+        <td>{ exercise.Duration }</td>
+    </tr>
+    <tr>
+        <th>Notes</th>
+        <td>{ exercise.Notes }</td>
+    </tr>
+</table>
+}
+
+templ ExerciseForm(Exercise *domain.Exercise, newOrEdit FormType) {
+{{
+// Create different attributes dependant on the type of form
+// I can actually target the body ( dont remember the tag name should probably have consts)
+// OR an oob swap for the overlay, defined here!
+var attributes templ.Attributes = make(templ.Attributes, 0)
+var buttonText string
+switch newOrEdit {
+    case EditForm: 
+        attributes["hx-put"] = fmt.Sprintf("/Exercises/%d", Exercise.Id)
+        buttonText = "Update"
+    case NewForm: 
+        attributes["hx-post"] = "/Exercises/new"
+        attributes["hx-target"] = "#Exercise-list"
+        attributes["hx-swap"] = "beforeend"
+        buttonText = "Create"
+}
+}}
+<form id="Exercise-form" {attributes...} 
+    _="on htmx:afterRequest
+        remove me 
+        then add .hidden to #overlay
+    end">
+    @ExerciseFields(Exercise)
+    <button type="submit">{buttonText}</button>
+    <button type="button" 
+    _="on click remove #Exercise-form then add .hidden to #overlay">
+        Cancel
+    </button>
+</form>
+}
+
+templ ExerciseFields(exercise *domain.Exercise) {
+{{
+    if exercise == nil {
+        exercise = &domain.Exercise{}
+        exercise.Date = time.Now().Format("2006-01-02")
+    }
+}}
+<div class="form-row">
+    <label for="date">Date</label>
+    <input id="date" name="date" type="date" value={ exercise.Name } required />
+</div>
+<div class="form-row">
+    <label for="duration">Duration</label>
+    <input id="duration" name="duration" type="number" value={ exercise.Duration } />
+</div>
+<div class="form-row">
+    <label for="type">Type</label>
+    <input id="type" name="type" type="text" value={ exercise.Kind } required />
+</div>
+<div class="form-row">
+    <label for="note">Note</label>
+    <textarea id="note" name="note" type="text" rows="4">{exercise.Notes}</textarea>
+</div>
+}

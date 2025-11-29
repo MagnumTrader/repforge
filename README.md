@@ -23,14 +23,16 @@ Wow for adjusting an entity
 - Did you update in_mem.go for local testing?
 - Did existing tests break? (good - they caught something!)
 
-
 lets go back to basics?
 
-- [ ] Add Exercises which is a subcomponent of every workout
+# Todos
+- [ ] Exercise objects added
+- [ ] Deletion of exercises
+- [ ] Exercise form
+- [ ] Add workoutExercises which is a subcomponent of every workout
 - [ ] Add tests for service..
 - [ ] Add ctx in db calls and service?
-- [ ] workout exercise should have reps, 
-      Sets then have a workout that we relate that rep and weight/time to 
+- [ ] add Sets (number of reps + weights of exercises) then have a workout that we relate that rep and weight/time to 
 - [ ] Move to generic repo for entities
 - [x] Nicer font :) lets go with ubuntu font
 - [x] Add edit workout screen ( same as new but populated with the current data)
@@ -60,3 +62,5 @@ lets go back to basics?
 - [x] Add table for workouts AS IS
 - [x] Add functions for creating a workout and store in db
 - [x] remove notes in list view
+# Ideas
+- [ ] Could the system have coaches that distributes workout programs
