@@ -26,14 +26,20 @@ Wow for adjusting an entity
 lets go back to basics?
 
 # Todos
-- [ ] Exercise objects added
 - [ ] Deletion of exercises
 - [ ] Exercise form
+- [ ] Edit exercise
+- [ ] New Exercise
+- [ ] Add link to exercise
+- [ ] Add db repo for exercises
 - [ ] Add workoutExercises which is a subcomponent of every workout
 - [ ] Add tests for service..
 - [ ] Add ctx in db calls and service?
 - [ ] add Sets (number of reps + weights of exercises) then have a workout that we relate that rep and weight/time to 
 - [ ] Move to generic repo for entities
+- [x] Exercise details
+- [x] Exercise objects added
+- [x] List of exercise route
 - [x] Nicer font :) lets go with ubuntu font
 - [x] Add edit workout screen ( same as new but populated with the current data)
       Document the process of how we best do it

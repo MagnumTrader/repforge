@@ -21,6 +21,8 @@ type exerciseHandler struct {
 }
 
 func (e *exerciseHandler) ExerciseDetails(c *gin.Context) {
+
+	// Show the ExerciseDetails
 	id, err := parseId(c)
 	if err != nil {
 		respondError(c, http.StatusBadRequest, "Invalid Exercise Id", err)
@@ -31,8 +33,14 @@ func (e *exerciseHandler) ExerciseDetails(c *gin.Context) {
 		respondError(c, http.StatusInternalServerError, "Failed to retrieve Exercise", err)
 		return
 	}
-	// TODO: Render templates for this shiet
-	c.String(http.StatusOK, fmt.Sprintf("exercise Name: %s, category: %s", ex.Name, ex.Category))
+
+	setHtml200(c)
+	
+	template := ui.ExerciseDetailsPartial(*ex)
+	if !IsHtmxRequest(c) {
+		template = ui.Base(template)
+	}
+	template.Render(c.Request.Context(), c.Writer)
 }
 
 func (e *exerciseHandler) ExerciseList(c *gin.Context) {
