@@ -27,6 +27,7 @@ type Category string
 const (
 	CategoryLegs = "legs"
 	CategoryArms = "arms"
+	CategoryChest = "chest"
 )
 
 

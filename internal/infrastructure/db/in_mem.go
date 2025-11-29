@@ -2,6 +2,8 @@ package db
 
 import (
 	"fmt"
+	"slices"
+
 	"github.com/MagnumTrader/repforge/internal/domain"
 )
 
@@ -98,7 +100,13 @@ func (d *InMem) SaveExercise(exercise *domain.Exercise) error {
 }
 
 func (d *InMem) DeleteExercise(id int) error {
-	panic("not implemented")
+	for i, e := range exercises {
+		if e.Id == id {
+			exercises = slices.Delete(exercises, i , i + 1)
+			return nil
+		}
+	}
+	return fmt.Errorf("Unable to delete exercise with id %d", id)
 }
 
 func (d *InMem) UpdateExercise(exercise *domain.Exercise) error {

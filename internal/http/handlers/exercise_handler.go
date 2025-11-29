@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/MagnumTrader/repforge/internal/http/ui"
@@ -20,6 +19,21 @@ type exerciseHandler struct {
 	service *services.ExerciseService
 }
 
+func (e *exerciseHandler) DeleteExercise(c *gin.Context) {
+
+	id, err := parseId(c)
+	if err != nil {
+		respondError(c, http.StatusBadRequest, "Failed to parse Id", err)
+		return
+	}
+
+	err = e.service.DeleteExercise(id)
+	if err != nil {
+		respondError(c, http.StatusInternalServerError, "Failed to delete exercise", err)
+		return
+	}
+	c.Status(http.StatusOK)
+}
 func (e *exerciseHandler) ExerciseDetails(c *gin.Context) {
 
 	// Show the ExerciseDetails
@@ -35,7 +49,7 @@ func (e *exerciseHandler) ExerciseDetails(c *gin.Context) {
 	}
 
 	setHtml200(c)
-	
+
 	template := ui.ExerciseDetailsPartial(*ex)
 	if !IsHtmxRequest(c) {
 		template = ui.Base(template)

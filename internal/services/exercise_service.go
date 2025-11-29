@@ -41,3 +41,7 @@ func (e *ExerciseService) GetAll() ([]domain.Exercise, error) {
 	}
 	return all, nil
 }
+
+func (s *ExerciseService) DeleteExercise(id int) error {
+	return s.repo.DeleteExercise(id)
+}

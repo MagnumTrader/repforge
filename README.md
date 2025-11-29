@@ -26,7 +26,7 @@ Wow for adjusting an entity
 lets go back to basics?
 
 # Todos
-- [ ] Deletion of exercises
+- [x] Deletion of exercises
 - [ ] Exercise form
 - [ ] Edit exercise
 - [ ] New Exercise
