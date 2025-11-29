@@ -8,11 +8,11 @@ but what was it,
 
 lets go back to basics?
 
-- [ ] Nicer font :) lets go with ubuntu font
 - [ ] Add tests for service..
 - [ ] Add Exercises which is a subcomponent of every workout
 - [ ] More fields on workout, what is the flow of expanding the app?
 - [ ] Add ctx in db calls and service?
+- [x] Nicer font :) lets go with ubuntu font
 - [x] Add edit workout screen ( same as new but populated with the current data)
       Document the process of how we best do it
       
