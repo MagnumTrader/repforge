@@ -58,28 +58,26 @@ margin-left: 0.5rem;
 }
 
 .listwrapper {
-box-sizing: border-box;
+    box-sizing: border-box;
 
-height: 100%;
-/* fills main exactly */
-display: grid;
-grid-template-columns: 1fr;
-grid-template-rows: auto auto 1fr;
+    height: 100%;
+    /* fills main exactly */
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
 
-&>span {
-align-self: end;
-justify-self: start;
-width: auto;
-
-}
-
-&>table {
-justify-self: center;
-}
+    &>span {
+        align-self: end;
+        justify-self: start;
+        width: auto;
+    }
+    &>table {
+        justify-self: center;
+    }
 }
 
 table {
-width: 60%;
+    width: 60%;
 }
 
 a:hover,
