@@ -48,7 +48,6 @@ func (s *ExerciseService) DeleteExercise(id int) error {
 }
 
 func (s *ExerciseService) EditExercise(exercise *domain.Exercise) error {
-	slog.Info("hello we are in the service")
 	return s.repo.UpdateExercise(exercise)
 }
 
