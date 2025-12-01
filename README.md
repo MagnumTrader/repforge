@@ -25,17 +25,25 @@ Wow for adjusting an entity
 
 lets go back to basics?
 
+<!--
+NOTE: What should be the next step, 
+we have a few things we can do
+
+-> General form handling and presentation pages for reusability
+-> Way of updating the lists when you save the form right now we only 
+   -> Could be just a htmx reload, but could also be an id on the tr
+-->
 # Todos
-- [ ] Exercise form
-- [ ] Edit exercise
-- [ ] New Exercise
-- [ ] Add link to exercise
 - [ ] Add db repo for exercises
 - [ ] Add workoutExercises which is a subcomponent of every workout
 - [ ] Add tests for service..
 - [ ] Add ctx in db calls and service?
 - [ ] add Sets (number of reps + weights of exercises) then have a workout that we relate that rep and weight/time to 
 - [ ] Move to generic repo for entities
+- [x] Exercise form
+- [x] Edit exercise
+- [x] New Exercise
+- [x] Add link to exercise
 - [x] Deletion of exercises
 - [x] Exercise details
 - [x] Exercise objects added
