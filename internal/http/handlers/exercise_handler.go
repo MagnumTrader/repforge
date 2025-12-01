@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"fmt"
-	"log/slog"
 	"net/http"
 
 	"github.com/MagnumTrader/repforge/internal/domain"
