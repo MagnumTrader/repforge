@@ -31,5 +31,8 @@ func RegisterExerciseRoutes(r *gin.Engine, service *services.ExerciseService)() 
 	grp.GET("", handler.ExerciseList)
 	grp.GET("/:id", handler.ExerciseDetails)
 	grp.DELETE(":id", handler.DeleteExercise)
+	grp.PUT("/:id", handler.EditExercise)
+	grp.GET("/edit/:id", handler.EditExerciseForm)
 	grp.POST("/new", handler.NewExercise)
+	grp.GET("/new", handler.NewExerciseForm)
 }

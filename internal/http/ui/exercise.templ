@@ -14,15 +14,14 @@ templ ExerciseListPartial(exercises []domain.Exercise) {
 				<th>Category</th>
 				<th></th>
 			</thead>
-			<tbody id="Exercise-list">
+			<tbody id="exercise-list">
 				for _, ex := range exercises {
 					@ExerciseTableRow(ex)
 				}
 			</tbody>
 		</table>
-		<span hx-get="/Exercises/new" class="link" hx-target="#overlay-content" _="on click remove .hidden from #overlay">
-			Add
-			Exercise
+		<span hx-get="/exercises/new" class="link" hx-target="#overlay-content" _="on click remove .hidden from #overlay">
+			Add Exercise
 		</span>
 	</div>
 }
@@ -63,8 +62,12 @@ templ ExerciseDetailsPartial(exercise domain.Exercise) {
 	</table>
 }
 
-templ ExerciseForm(Exercise *domain.Exercise, newOrEdit FormType) {
+templ ExerciseForm(exercise *domain.Exercise, newOrEdit FormType) {
 	{{
+
+        if exercise == nil {
+            exercise = &domain.Exercise{}
+        }
 		// Create different attributes dependant on the type of form
 		// I can actually target the body ( dont remember the tag name should probably have consts)
 		// OR an oob swap for the overlay, defined here!
@@ -72,26 +75,26 @@ templ ExerciseForm(Exercise *domain.Exercise, newOrEdit FormType) {
 		var buttonText string
 		switch newOrEdit {
 		case EditForm:
-			attributes["hx-put"] = fmt.Sprintf("/Exercises/%d", Exercise.Id)
+			attributes["hx-put"] = fmt.Sprintf("/exercises/%d", exercise.Id)
 			buttonText = "Update"
 		case NewForm:
-			attributes["hx-post"] = "/Exercises/new"
-			attributes["hx-target"] = "#Exercise-list"
+			attributes["hx-post"] = "/exercises/new"
+			attributes["hx-target"] = "#exercise-list"
 			attributes["hx-swap"] = "beforeend"
 			buttonText = "Create"
 		}
 	}}
 	<form
-		id="Exercise-form"
+		id="exercise-form"
 		{ attributes... }
 		_="on htmx:afterRequest
         remove me 
         then add .hidden to #overlay
     end"
 	>
-		@ExerciseFields(Exercise)
+		@ExerciseFields(exercise)
 		<button type="submit">{ buttonText }</button>
-		<button type="button" _="on click remove #Exercise-form then add .hidden to #overlay">
+		<button type="button" _="on click remove #exercise-form then add .hidden to #overlay">
 			Cancel
 		</button>
 	</form>
@@ -112,4 +115,39 @@ templ ExerciseFields(exercise *domain.Exercise) {
 		<label for="category">Category</label>
 		<input id="category" name="category" type="text" value={ exercise.Category } required/>
 	</div>
+}
+
+templ NewExerciseForm(exercise *domain.Exercise, newOrEdit FormType) {
+
+	{{
+		// Create different attributes dependant on the type of form
+		// I can actually target the body ( dont remember the tag name should probably have consts)
+		// OR an oob swap for the overlay, defined here!
+		var attributes templ.Attributes = make(templ.Attributes, 0)
+		var buttonText string
+		switch newOrEdit {
+		case EditForm:
+			attributes["hx-put"] = fmt.Sprintf("/exercises/%d", exercise.Id)
+			buttonText = "Update"
+		case NewForm:
+			attributes["hx-post"] = "/exercises/new"
+			attributes["hx-target"] = "#workout-list"
+			attributes["hx-swap"] = "beforeend"
+			buttonText = "Create"
+		}
+	}}
+	<form
+		id="workout-form"
+		{ attributes... }
+		_="on htmx:afterRequest
+        remove me 
+        then add .hidden to #overlay
+    end"
+	>
+		@ExerciseFields(exercise)
+		<button type="submit">{ buttonText }</button>
+		<button type="button" _="on click remove #workout-form then add .hidden to #overlay">
+			Cancel
+		</button>
+	</form>
 }

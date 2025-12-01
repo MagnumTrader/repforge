@@ -33,7 +33,7 @@ func ExerciseListPartial(exercises []domain.Exercise) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"listwrapper\"><h1>List of Exercises </h1><table><thead><th>Id</th><th>Name</th><th>Category</th><th></th></thead> <tbody id=\"Exercise-list\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"listwrapper\"><h1>List of Exercises </h1><table><thead><th>Id</th><th>Name</th><th>Category</th><th></th></thead> <tbody id=\"exercise-list\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -43,7 +43,7 @@ func ExerciseListPartial(exercises []domain.Exercise) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</tbody></table><span hx-get=\"/Exercises/new\" class=\"link\" hx-target=\"#overlay-content\" _=\"on click remove .hidden from #overlay\">Add Exercise</span></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</tbody></table><span hx-get=\"/exercises/new\" class=\"link\" hx-target=\"#overlay-content\" _=\"on click remove .hidden from #overlay\">Add Exercise</span></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -87,7 +87,7 @@ func ExerciseTableRow(exercise domain.Exercise) templ.Component {
 		var templ_7745c5c3_Var3 string
 		templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(exercise.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 35, Col: 21}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 34, Col: 21}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 		if templ_7745c5c3_Err != nil {
@@ -100,7 +100,7 @@ func ExerciseTableRow(exercise domain.Exercise) templ.Component {
 		var templ_7745c5c3_Var4 string
 		templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(exercise.Category)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 36, Col: 25}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 35, Col: 25}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 		if templ_7745c5c3_Err != nil {
@@ -113,7 +113,7 @@ func ExerciseTableRow(exercise domain.Exercise) templ.Component {
 		var templ_7745c5c3_Var5 string
 		templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/exercises/edit/%d", exercise.Id))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 39, Col: 59}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 38, Col: 59}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 		if templ_7745c5c3_Err != nil {
@@ -126,7 +126,7 @@ func ExerciseTableRow(exercise domain.Exercise) templ.Component {
 		var templ_7745c5c3_Var6 string
 		templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("/exercises/%d", exercise.Id))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 45, Col: 62}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 44, Col: 62}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 		if templ_7745c5c3_Err != nil {
@@ -168,7 +168,7 @@ func ExerciseDetailsPartial(exercise domain.Exercise) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(exercise.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 57, Col: 22}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 56, Col: 22}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
@@ -181,7 +181,7 @@ func ExerciseDetailsPartial(exercise domain.Exercise) templ.Component {
 		var templ_7745c5c3_Var9 string
 		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(exercise.Category)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 61, Col: 26}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 60, Col: 26}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 		if templ_7745c5c3_Err != nil {
@@ -195,7 +195,7 @@ func ExerciseDetailsPartial(exercise domain.Exercise) templ.Component {
 	})
 }
 
-func ExerciseForm(Exercise *domain.Exercise, newOrEdit FormType) templ.Component {
+func ExerciseForm(exercise *domain.Exercise, newOrEdit FormType) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -216,6 +216,9 @@ func ExerciseForm(Exercise *domain.Exercise, newOrEdit FormType) templ.Component
 			templ_7745c5c3_Var10 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
+		if exercise == nil {
+			exercise = &domain.Exercise{}
+		}
 		// Create different attributes dependant on the type of form
 		// I can actually target the body ( dont remember the tag name should probably have consts)
 		// OR an oob swap for the overlay, defined here!
@@ -223,15 +226,15 @@ func ExerciseForm(Exercise *domain.Exercise, newOrEdit FormType) templ.Component
 		var buttonText string
 		switch newOrEdit {
 		case EditForm:
-			attributes["hx-put"] = fmt.Sprintf("/Exercises/%d", Exercise.Id)
+			attributes["hx-put"] = fmt.Sprintf("/exercises/%d", exercise.Id)
 			buttonText = "Update"
 		case NewForm:
-			attributes["hx-post"] = "/Exercises/new"
-			attributes["hx-target"] = "#Exercise-list"
+			attributes["hx-post"] = "/exercises/new"
+			attributes["hx-target"] = "#exercise-list"
 			attributes["hx-swap"] = "beforeend"
 			buttonText = "Create"
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<form id=\"Exercise-form\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "<form id=\"exercise-form\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -243,7 +246,7 @@ func ExerciseForm(Exercise *domain.Exercise, newOrEdit FormType) templ.Component
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = ExerciseFields(Exercise).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = ExerciseFields(exercise).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -254,13 +257,13 @@ func ExerciseForm(Exercise *domain.Exercise, newOrEdit FormType) templ.Component
 		var templ_7745c5c3_Var11 string
 		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(buttonText)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 93, Col: 36}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 96, Col: 36}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "</button> <button type=\"button\" _=\"on click remove #Exercise-form then add .hidden to #overlay\">Cancel</button></form>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 15, "</button> <button type=\"button\" _=\"on click remove #exercise-form then add .hidden to #overlay\">Cancel</button></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -300,7 +303,7 @@ func ExerciseFields(exercise *domain.Exercise) templ.Component {
 		var templ_7745c5c3_Var13 string
 		templ_7745c5c3_Var13, templ_7745c5c3_Err = templ.JoinStringErrs(exercise.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 109, Col: 64}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 112, Col: 64}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var13))
 		if templ_7745c5c3_Err != nil {
@@ -313,13 +316,86 @@ func ExerciseFields(exercise *domain.Exercise) templ.Component {
 		var templ_7745c5c3_Var14 string
 		templ_7745c5c3_Var14, templ_7745c5c3_Err = templ.JoinStringErrs(exercise.Category)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 113, Col: 76}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 116, Col: 76}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var14))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 18, "\" required></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func NewExerciseForm(exercise *domain.Exercise, newOrEdit FormType) templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var15 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var15 == nil {
+			templ_7745c5c3_Var15 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		// Create different attributes dependant on the type of form
+		// I can actually target the body ( dont remember the tag name should probably have consts)
+		// OR an oob swap for the overlay, defined here!
+		var attributes templ.Attributes = make(templ.Attributes, 0)
+		var buttonText string
+		switch newOrEdit {
+		case EditForm:
+			attributes["hx-put"] = fmt.Sprintf("/exercises/%d", exercise.Id)
+			buttonText = "Update"
+		case NewForm:
+			attributes["hx-post"] = "/exercises/new"
+			attributes["hx-target"] = "#workout-list"
+			attributes["hx-swap"] = "beforeend"
+			buttonText = "Create"
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, "<form id=\"workout-form\"")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templ.RenderAttributes(ctx, templ_7745c5c3_Buffer, attributes)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, " _=\"on htmx:afterRequest\n        remove me \n        then add .hidden to #overlay\n    end\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = ExerciseFields(exercise).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 21, "<button type=\"submit\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		var templ_7745c5c3_Var16 string
+		templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(buttonText)
+		if templ_7745c5c3_Err != nil {
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/http/ui/exercise.templ`, Line: 148, Col: 36}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 22, "</button> <button type=\"button\" _=\"on click remove #workout-form then add .hidden to #overlay\">Cancel</button></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

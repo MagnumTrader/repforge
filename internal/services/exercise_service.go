@@ -2,6 +2,7 @@ package services
 
 import (
 	"fmt"
+	"log/slog"
 
 	"github.com/MagnumTrader/repforge/internal/domain"
 )
@@ -45,3 +46,9 @@ func (e *ExerciseService) GetAll() ([]domain.Exercise, error) {
 func (s *ExerciseService) DeleteExercise(id int) error {
 	return s.repo.DeleteExercise(id)
 }
+
+func (s *ExerciseService) EditExercise(exercise *domain.Exercise) error {
+	slog.Info("hello we are in the service")
+	return s.repo.UpdateExercise(exercise)
+}
+
