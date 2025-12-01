@@ -61,7 +61,7 @@ var workouts = []domain.Workout{
 	},
 }
 
-var exercises = []domain.Exercise {
+var exercises = []*domain.Exercise {
 	{
 		Id:   1,
 		Name: "Leg Press",
@@ -78,7 +78,7 @@ var exercises = []domain.Exercise {
 func (d *InMem) GetExercise(id int) (*domain.Exercise, error) {
 	for _, ex := range exercises {
 		if ex.Id == id {
-			return &ex, nil
+			return ex, nil
 		}
 	}
 
@@ -86,7 +86,12 @@ func (d *InMem) GetExercise(id int) (*domain.Exercise, error) {
 }
 
 func (d *InMem) GetAllExercise(userId int) ([]domain.Exercise, error) {
-	return exercises, nil
+	var exercisesNoPointer =  []domain.Exercise{}
+
+	for _, ex := range exercises {
+		exercisesNoPointer = append(exercisesNoPointer, *ex)
+	}
+	return exercisesNoPointer, nil
 }
 
 func (d *InMem) SaveExercise(exercise *domain.Exercise) error {
@@ -95,7 +100,7 @@ func (d *InMem) SaveExercise(exercise *domain.Exercise) error {
 		maxId = max(maxId, e.Id)
 	}
 	exercise.Id = maxId + 1
-	exercises = append(exercises, *exercise)
+	exercises = append(exercises, exercise)
 	return nil
 }
 
@@ -110,5 +115,11 @@ func (d *InMem) DeleteExercise(id int) error {
 }
 
 func (d *InMem) UpdateExercise(exercise *domain.Exercise) error {
-	panic("not implemented")
+	for i, ex := range exercises {
+		if ex.Id == exercise.Id {
+			exercises[i] = exercise
+			return nil
+		}
+	}
+	return fmt.Errorf("Could not find exercise with id %d", exercise.Id)
 }
