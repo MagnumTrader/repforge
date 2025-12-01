@@ -79,7 +79,6 @@ func (e *exerciseHandler) ExerciseList(c *gin.Context) {
 }
 
 func (e *exerciseHandler) EditExercise(c *gin.Context) {
-	slog.Info("we are here")
 	id, err := parseId(c)
 	if err != nil {
 		respondError(c, http.StatusBadRequest, "Invalid exercise id", err)
