@@ -120,13 +120,9 @@ func (h *workout) EditWorkout(ctx *gin.Context) {
 		return
 	}
 
-	// Maybe send a refresh request dont remember whats its called?
-
-	// TODO: we should have a way of updating the list that we are already lookin at
-	// This is actually a reason to have its own page for the update
-	// or just rerender the entire list, but do i have to fetch from the DB?
-	// Is that even an issue?
-	ctx.String(http.StatusOK, "")
+	setHtml200(ctx)
+	template := ui.WorkoutTableRow(*workout)
+	template.Render(ctx.Request.Context(), ctx.Writer)
 }
 
 func (h *workout) NewWorkoutForm(ctx *gin.Context) {

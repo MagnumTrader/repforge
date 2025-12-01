@@ -31,7 +31,7 @@ templ WorkOutListPartial(workouts []domain.Workout) {
 }
 
 templ WorkoutTableRow(wo domain.Workout) {
-<tr>
+<tr id={fmt.Sprintf("workoutid-%d", wo.Id)}>
     <td>
         @NavButton(wo.Date, fmt.Sprintf("/workouts/%d", wo.Id))
     </td>
@@ -93,6 +93,8 @@ var buttonText string
 switch newOrEdit {
     case EditForm: 
         attributes["hx-put"] = fmt.Sprintf("/workouts/%d", workout.Id)
+        attributes["hx-target"] = fmt.Sprintf("#workoutid-%d", workout.Id)
+        attributes["hx-swap"] = "outerHTML"
         buttonText = "Update"
     case NewForm: 
         attributes["hx-post"] = "/workouts/new"

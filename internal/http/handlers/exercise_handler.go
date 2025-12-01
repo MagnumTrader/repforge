@@ -107,7 +107,9 @@ func (e *exerciseHandler) EditExercise(c *gin.Context) {
 		respondError(c, http.StatusInternalServerError, "Failed to update Exercise", err)
 		return
 	}
-	// TODO: what should we return here?
+
+	setHtml200(c)
+	ui.ExerciseTableRow(exercise).Render(c.Request.Context(), c.Writer)
 }
 func (e *exerciseHandler) EditExerciseForm(c *gin.Context) {
 

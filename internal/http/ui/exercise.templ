@@ -27,7 +27,7 @@ templ ExerciseListPartial(exercises []domain.Exercise) {
 }
 
 templ ExerciseTableRow(exercise domain.Exercise) {
-	<tr>
+	<tr id={fmt.Sprintf("exerciseid-%d", exercise.Id)}>
 		<td>
 			@NavButton(strconv.Itoa(exercise.Id), fmt.Sprintf("/exercises/%d", exercise.Id))
 		</td>
@@ -64,10 +64,9 @@ templ ExerciseDetailsPartial(exercise domain.Exercise) {
 
 templ ExerciseForm(exercise *domain.Exercise, newOrEdit FormType) {
 	{{
-
-        if exercise == nil {
-            exercise = &domain.Exercise{}
-        }
+		if exercise == nil {
+			exercise = &domain.Exercise{}
+		}
 		// Create different attributes dependant on the type of form
 		// I can actually target the body ( dont remember the tag name should probably have consts)
 		// OR an oob swap for the overlay, defined here!
@@ -76,6 +75,8 @@ templ ExerciseForm(exercise *domain.Exercise, newOrEdit FormType) {
 		switch newOrEdit {
 		case EditForm:
 			attributes["hx-put"] = fmt.Sprintf("/exercises/%d", exercise.Id)
+			attributes["hx-target"] = fmt.Sprintf("#exerciseid-%d", exercise.Id)
+			attributes["hx-swap"] = "outerHTML"
 			buttonText = "Update"
 		case NewForm:
 			attributes["hx-post"] = "/exercises/new"
@@ -118,7 +119,6 @@ templ ExerciseFields(exercise *domain.Exercise) {
 }
 
 templ NewExerciseForm(exercise *domain.Exercise, newOrEdit FormType) {
-
 	{{
 		// Create different attributes dependant on the type of form
 		// I can actually target the body ( dont remember the tag name should probably have consts)
