@@ -155,5 +155,11 @@ func (e *exerciseHandler) NewExercise(c *gin.Context) {
 		return
 	}
 
-	e.service.CreateExercise(ex.Name, ex.Category)
+	exercise, err := e.service.CreateExercise(ex.Name, ex.Category)
+	if err != nil {
+		respondError(c, http.StatusInternalServerError, "Failed to create exercise", err)
+		return
+	}
+	setHtml200(c)
+	ui.ExerciseTableRow(*exercise).Render(c.Request.Context(), c.Writer)
 }

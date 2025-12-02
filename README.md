@@ -27,19 +27,25 @@ lets go back to basics?
 
 <!--
 NOTE: What should be the next step, 
-we have a few things we can do
+---
+i can have a type switch in the handler, no the handler is already type safe,
+So it has to be in the rendering thing.
+To make a genneric creation of a form. it can take FormRenderer? then i implement this wrapper, and pass it
+What you get back from a renderer is formfields (templ.component)
+Then its type safe all the way
 
 -> General form handling and presentation pages for reusability
--> Way of updating the lists when you save the form right now we only 
-   -> Could be just a htmx reload, but could also be an id on the tr
 -->
 # Todos
+- [ ] generic forms and details pages
+- [ ] Add workoutExercise for the workouts, a workoutexercise contains sets and a Exercise
+- [ ] add Sets (number of reps + weights of exercises) then have a workout that we relate that rep and weight/time to 
+- [ ] Create a cli that uses the same service for testing
 - [ ] Add db repo for exercises
-- [ ] Add workoutExercises which is a subcomponent of every workout
 - [ ] Add tests for service..
 - [ ] Add ctx in db calls and service?
-- [ ] add Sets (number of reps + weights of exercises) then have a workout that we relate that rep and weight/time to 
 - [ ] Move to generic repo for entities
+- [x] Updating lists
 - [x] Exercise form
 - [x] Edit exercise
 - [x] New Exercise
