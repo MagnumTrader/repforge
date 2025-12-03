@@ -108,12 +108,12 @@ func (d *Db) DeleteWorkout(id int) error {
 // UpdateWorkout implements domain.WorkOutRepo.
 func (d *Db) UpdateWorkout(workout *domain.Workout) error {
 	query := "UPDATE workouts SET date = ?, duration = ?, type = ?, notes = ? where id = ?"
-	rows, err := d.inner.Exec(query, 
-			&workout.Date,
-			&workout.Duration,
-			&workout.Kind,
-			&workout.Notes,
-			&workout.Id,
+	rows, err := d.inner.Exec(query,
+		&workout.Date,
+		&workout.Duration,
+		&workout.Kind,
+		&workout.Notes,
+		&workout.Id,
 	)
 
 	// NOTE: Only errors if db does not support rowsaffected (i think)
@@ -125,3 +125,41 @@ func (d *Db) UpdateWorkout(workout *domain.Workout) error {
 	return err
 }
 
+// DeleteExercise implements domain.ExerciseRepo.
+func (d *Db) DeleteExercise(id int) error {
+	panic("unimplemented")
+}
+
+// GetAllExercise implements domain.ExerciseRepo.
+func (d *Db) GetAllExercise(userId int) ([]domain.Exercise, error) {
+	panic("unimplemented")
+}
+
+// GetExercise implements domain.ExerciseRepo.
+func (d *Db) GetExercise(id int) (*domain.Exercise, error) {
+	panic("unimplemented")
+}
+
+// SaveExercise implements domain.ExerciseRepo.
+func (d *Db) SaveExercise(workout *domain.Exercise) error {
+
+	query := "insert into exercises (name, category) values (?, ?)"
+
+	result, err := d.inner.Exec(query, workout.Name, workout.Category)
+	if err != nil {
+		slog.Error("Failed to insert exercise", "error", err)
+		return err
+	}
+
+	// NOTE: fails only if not supported (i think)
+	id, _ := result.LastInsertId()
+
+	workout.Id = int(id)
+
+	return nil
+}
+
+// UpdateExercise implements domain.ExerciseRepo.
+func (d *Db) UpdateExercise(workout *domain.Exercise) error {
+	panic("unimplemented")
+}
