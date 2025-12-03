@@ -125,14 +125,50 @@ func (d *Db) UpdateWorkout(workout *domain.Workout) error {
 	return err
 }
 
+
+const exerciseDbName = "exercises"
 // DeleteExercise implements domain.ExerciseRepo.
 func (d *Db) DeleteExercise(id int) error {
-	panic("unimplemented")
+
+	query := fmt.Sprintf("DELETE from %s where id = %d", exerciseDbName, id)
+
+	res, err := d.inner.Exec(query)
+
+	if err != nil {
+		return fmt.Errorf("Failed to delete exercise with id %d: %w", id, err)
+	}
+
+	affected, err := res.RowsAffected()
+	if err != nil {
+		// not supported so cant check rows affected
+	  return nil
+	}
+
+	if affected == 0 {
+		return fmt.Errorf("Failed to delete exercise, 0 rows affected!")
+	}
+
+	return nil
 }
 
 // GetAllExercise implements domain.ExerciseRepo.
 func (d *Db) GetAllExercise(userId int) ([]domain.Exercise, error) {
-	panic("unimplemented")
+
+	query := fmt.Sprintf("select * from %s", exerciseDbName)
+	rows, err := d.inner.Query(query)
+
+	if err != nil {
+		return nil, fmt.Errorf("Failed to fetch all exercises %w", err)
+	}
+		
+	exerciseList := []domain.Exercise{}
+	for rows.Next() {
+		ex := domain.Exercise{}
+		rows.Scan(&ex.Id, &ex.Name, &ex.Category)
+		exerciseList = append(exerciseList, ex)
+	}
+
+	return exerciseList, nil
 }
 
 // GetExercise implements domain.ExerciseRepo.
@@ -143,7 +179,7 @@ func (d *Db) GetExercise(id int) (*domain.Exercise, error) {
 // SaveExercise implements domain.ExerciseRepo.
 func (d *Db) SaveExercise(workout *domain.Exercise) error {
 
-	query := "insert into exercises (name, category) values (?, ?)"
+	query := fmt.Sprintf("insert into %s (name, category) values (?, ?)", exerciseDbName)
 
 	result, err := d.inner.Exec(query, workout.Name, workout.Category)
 	if err != nil {
