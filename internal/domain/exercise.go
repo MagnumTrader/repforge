@@ -11,7 +11,7 @@ link?
 type ExerciseRepo interface {
 	GetExercise(id int) (*Exercise, error)
 	GetAllExercise(userId int) ([]Exercise, error)
-	SaveExercise(workout *Exercise) error
+	CreateExercise(workout *Exercise) error
 	DeleteExercise(id int) error
 	UpdateExercise(workout *Exercise) error
 }

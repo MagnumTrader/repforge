@@ -177,7 +177,7 @@ func (d *Db) GetExercise(id int) (*domain.Exercise, error) {
 }
 
 // SaveExercise implements domain.ExerciseRepo.
-func (d *Db) SaveExercise(workout *domain.Exercise) error {
+func (d *Db) CreateExercise(workout *domain.Exercise) error {
 
 	query := fmt.Sprintf("insert into %s (name, category) values (?, ?)", exerciseDbName)
 

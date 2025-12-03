@@ -94,7 +94,7 @@ func (d *InMem) GetAllExercise(userId int) ([]domain.Exercise, error) {
 	return exercisesNoPointer, nil
 }
 
-func (d *InMem) SaveExercise(exercise *domain.Exercise) error {
+func (d *InMem) CreateExercise(exercise *domain.Exercise) error {
 	var maxId int
 	for _, e := range exercises {
 		maxId = max(maxId, e.Id)
