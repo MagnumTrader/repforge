@@ -10,9 +10,6 @@ import (
 	"github.com/MagnumTrader/repforge/internal/services"
 )
 
-// TODO: Create more advanced cmdline.
-// create object then parse the fields
-// c
 func main() {
 
 	if len(os.Args) < 2 {
@@ -45,7 +42,6 @@ func main() {
 		for _, ex := range all {
 			fmt.Printf("%+v,\n", ex)
 		}
-
 	}
 }
 
