@@ -2,10 +2,13 @@ package db
 
 import (
 	"database/sql"
+	"embed"
 	"fmt"
 	"log/slog"
+	"os"
+	"sort"
+	"strings"
 
-	"github.com/MagnumTrader/repforge/internal/domain"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -15,187 +18,126 @@ type Db struct {
 
 func NewDb() *Db {
 	db, err := sql.Open("sqlite3", "data/repforge.db")
+
 	if err != nil {
 		panic(err)
 	}
 
-	return &Db{
+	database := Db{
 		inner: db,
 	}
+
+
+	if err := database.runMigrations(); err != nil {
+		slog.Error("Failed to run migrations", "error", err)
+		os.Exit(1)
+	}
+
+	return &database
 }
 
-func (d *Db) GetWorkout(id int) (*domain.Workout, error) {
-	row := d.inner.QueryRow("select id, date, type, duration, notes  from workouts where id=?", id)
+//go:embed migrations/*.sql
+var migrationsFS embed.FS
 
-	wo := &domain.Workout{
-		Id:       id,
-		Date:     "",
-		Kind:     "",
-		Duration: 0,
-		Notes:    "",
-	}
+func (db *Db) runMigrations() error {
+    // Ensure migrations table exists
+    _, err := db.inner.Exec(`
+        CREATE TABLE IF NOT EXISTS schema_migrations (
+            version INTEGER PRIMARY KEY,
+            applied_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+    `)
+    if err != nil {
+        return err
+    }
 
-	row.Scan(
-		&wo.Id,
-		&wo.Date,
-		&wo.Kind,
-		&wo.Duration,
-		&wo.Notes,
-	)
-	return wo, nil
+    // Get applied migrations
+    appliedMigrations, err := db.getAppliedMigrations()
+    if err != nil {
+        return err
+    }
+
+    // Read migration files
+    entries, err := migrationsFS.ReadDir("migrations")
+    if err != nil {
+        return err
+    }
+
+    // Sort migrations by filename
+    sort.Slice(entries, func(i, j int) bool {
+        return entries[i].Name() < entries[j].Name()
+    })
+
+    // Run pending migrations
+    for _, entry := range entries {
+        if !strings.HasSuffix(entry.Name(), ".sql") {
+            continue
+        }
+
+        version := extractVersion(entry.Name())
+        if appliedMigrations[version] {
+            continue // Already applied
+        }
+
+        slog.Info("Running migration", "file", entry.Name())
+        
+        content, err := migrationsFS.ReadFile("migrations/" + entry.Name())
+        if err != nil {
+            return err
+        }
+
+        // Run migration in transaction
+        tx, err := db.inner.Begin()
+        if err != nil {
+            return err
+        }
+
+        if _, err := tx.Exec(string(content)); err != nil {
+            tx.Rollback()
+            return fmt.Errorf("migration %s failed: %w", entry.Name(), err)
+        }
+
+        // Record migration
+        _, err = tx.Exec("INSERT INTO schema_migrations (version) VALUES (?)", version)
+        if err != nil {
+            tx.Rollback()
+            return err
+        }
+
+        if err := tx.Commit(); err != nil {
+            return err
+        }
+
+        slog.Info("Migration %s completed", "file", entry.Name())
+    }
+
+    return nil
 }
 
-func (d *Db) GetAllWorkouts(userId int) ([]domain.Workout, error) {
-	rows, err := d.inner.Query("select id, date, type, duration, notes  from workouts")
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
+func (db *Db) getAppliedMigrations() (map[int]bool, error) {
+    rows, err := db.inner.Query("SELECT version FROM schema_migrations")
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
 
-	workouts = make([]domain.Workout, 0)
+    applied := make(map[int]bool)
+	var version int
 
-	wo := &domain.Workout{}
+    for rows.Next() {
+        if err := rows.Scan(&version); err != nil {
+            return nil, err
+        }
+        applied[version] = true
+    }
 
-	for rows.Next() {
-		err := rows.Scan(
-			&wo.Id,
-			&wo.Date,
-			&wo.Kind,
-			&wo.Duration,
-			&wo.Notes)
-
-		if err != nil {
-			return nil, err
-		}
-
-		workouts = append(workouts, *wo)
-
-	}
-
-	return workouts, nil
+    return applied, nil
 }
 
-func (d *Db) SaveWorkout(workout *domain.Workout) error {
-	row, err := d.inner.Exec("INSERT INTO workouts (date, duration, type, notes) VALUES (?, ?, ?, ?)",
-		workout.Date,
-		workout.Duration,
-		workout.Kind,
-		workout.Notes,
-	)
-
-	if err != nil {
-		return err
-	}
-
-	// Sqlite3 supports this and we have autoincrement on The id
-	id, _ := row.LastInsertId()
-	workout.Id = int(id)
-
-	return nil
+func extractVersion(filename string) int {
+    // Extract number from "001_init.sql" -> 1
+    var version int
+    fmt.Sscanf(filename, "%d", &version)
+    return version
 }
 
-func (d *Db) DeleteWorkout(id int) error {
-	res, err := d.inner.Exec("delete from workouts where id = ?", id)
-	rows, err := res.RowsAffected()
-	// TODO: should return error when not found
-	if rows == 0 {
-		return fmt.Errorf("Zero records was updated")
-	}
-	slog.Info("delete request successfull", "Deleted rows", rows, "workout id", id)
-	return err
-}
-
-// UpdateWorkout implements domain.WorkOutRepo.
-func (d *Db) UpdateWorkout(workout *domain.Workout) error {
-	query := "UPDATE workouts SET date = ?, duration = ?, type = ?, notes = ? where id = ?"
-	rows, err := d.inner.Exec(query,
-		&workout.Date,
-		&workout.Duration,
-		&workout.Kind,
-		&workout.Notes,
-		&workout.Id,
-	)
-
-	// NOTE: Only errors if db does not support rowsaffected (i think)
-	affected, _ := rows.RowsAffected()
-	if affected == 0 {
-		return fmt.Errorf("Zero records was updated")
-	}
-
-	return err
-}
-
-
-const exerciseDbName = "exercises"
-// DeleteExercise implements domain.ExerciseRepo.
-func (d *Db) DeleteExercise(id int) error {
-
-	query := fmt.Sprintf("DELETE from %s where id = %d", exerciseDbName, id)
-
-	res, err := d.inner.Exec(query)
-
-	if err != nil {
-		return fmt.Errorf("Failed to delete exercise with id %d: %w", id, err)
-	}
-
-	affected, err := res.RowsAffected()
-	if err != nil {
-		// not supported so cant check rows affected
-	  return nil
-	}
-
-	if affected == 0 {
-		return fmt.Errorf("Failed to delete exercise, 0 rows affected!")
-	}
-
-	return nil
-}
-
-// GetAllExercise implements domain.ExerciseRepo.
-func (d *Db) GetAllExercise(userId int) ([]domain.Exercise, error) {
-
-	query := fmt.Sprintf("select * from %s", exerciseDbName)
-	rows, err := d.inner.Query(query)
-
-	if err != nil {
-		return nil, fmt.Errorf("Failed to fetch all exercises %w", err)
-	}
-		
-	exerciseList := []domain.Exercise{}
-	for rows.Next() {
-		ex := domain.Exercise{}
-		rows.Scan(&ex.Id, &ex.Name, &ex.Category)
-		exerciseList = append(exerciseList, ex)
-	}
-
-	return exerciseList, nil
-}
-
-// GetExercise implements domain.ExerciseRepo.
-func (d *Db) GetExercise(id int) (*domain.Exercise, error) {
-	panic("unimplemented")
-}
-
-// SaveExercise implements domain.ExerciseRepo.
-func (d *Db) CreateExercise(workout *domain.Exercise) error {
-
-	query := fmt.Sprintf("insert into %s (name, category) values (?, ?)", exerciseDbName)
-
-	result, err := d.inner.Exec(query, workout.Name, workout.Category)
-	if err != nil {
-		slog.Error("Failed to insert exercise", "error", err)
-		return err
-	}
-
-	// NOTE: fails only if not supported (i think)
-	id, _ := result.LastInsertId()
-
-	workout.Id = int(id)
-
-	return nil
-}
-
-// UpdateExercise implements domain.ExerciseRepo.
-func (d *Db) UpdateExercise(workout *domain.Exercise) error {
-	panic("unimplemented")
-}
