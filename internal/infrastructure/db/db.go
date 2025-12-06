@@ -16,6 +16,7 @@ type Db struct {
 	inner *sql.DB
 }
 
+
 func NewDb() *Db {
 	db, err := sql.Open("sqlite3", "file:data/repforge.db?_foreign_keys=on")
 
@@ -26,7 +27,6 @@ func NewDb() *Db {
 	database := Db{
 		inner: db,
 	}
-
 
 	if err := database.runMigrations(); err != nil {
 		slog.Error("Failed to run migrations", "error", err)
@@ -40,104 +40,103 @@ func NewDb() *Db {
 var migrationsFS embed.FS
 
 func (db *Db) runMigrations() error {
-    // Ensure migrations table exists
-    _, err := db.inner.Exec(`
+	// Ensure migrations table exists
+	_, err := db.inner.Exec(`
         CREATE TABLE IF NOT EXISTS schema_migrations (
             version INTEGER PRIMARY KEY,
             applied_at DATETIME DEFAULT CURRENT_TIMESTAMP
         )
     `)
-    if err != nil {
-        return err
-    }
+	if err != nil {
+		return err
+	}
 
-    // Get applied migrations
-    appliedMigrations, err := db.getAppliedMigrations()
-    if err != nil {
-        return err
-    }
+	// Get applied migrations
+	appliedMigrations, err := db.getAppliedMigrations()
+	if err != nil {
+		return err
+	}
 
-    // Read migration files
-    entries, err := migrationsFS.ReadDir("migrations")
-    if err != nil {
-        return err
-    }
+	// Read migration files
+	entries, err := migrationsFS.ReadDir("migrations")
+	if err != nil {
+		return err
+	}
 
-    // Sort migrations by filename
-    sort.Slice(entries, func(i, j int) bool {
-        return entries[i].Name() < entries[j].Name()
-    })
+	// Sort migrations by filename
+	sort.Slice(entries, func(i, j int) bool {
+		return entries[i].Name() < entries[j].Name()
+	})
 
-    // Run pending migrations
-    for _, entry := range entries {
-        if !strings.HasSuffix(entry.Name(), ".sql") {
-            continue
-        }
+	// Run pending migrations
+	for _, entry := range entries {
+		if !strings.HasSuffix(entry.Name(), ".sql") {
+			continue
+		}
 
-        version := extractVersion(entry.Name())
-        if appliedMigrations[version] {
-            continue // Already applied
-        }
+		version := extractVersion(entry.Name())
+		if appliedMigrations[version] {
+			continue // Already applied
+		}
 
-        slog.Info("Running migration", "file", entry.Name())
-        
-        content, err := migrationsFS.ReadFile("migrations/" + entry.Name())
-        if err != nil {
-            return err
-        }
+		slog.Info("Running migration", "file", entry.Name())
 
-        // Run migration in transaction
-        tx, err := db.inner.Begin()
-        if err != nil {
-            return err
-        }
+		content, err := migrationsFS.ReadFile("migrations/" + entry.Name())
+		if err != nil {
+			return err
+		}
 
-        if _, err := tx.Exec(string(content)); err != nil {
-            tx.Rollback()
-            return fmt.Errorf("migration %s failed: %w", entry.Name(), err)
-        }
+		// Run migration in transaction
+		tx, err := db.inner.Begin()
+		if err != nil {
+			return err
+		}
 
-        // Record migration
-        _, err = tx.Exec("INSERT INTO schema_migrations (version) VALUES (?)", version)
-        if err != nil {
-            tx.Rollback()
-            return err
-        }
+		if _, err := tx.Exec(string(content)); err != nil {
+			tx.Rollback()
+			return fmt.Errorf("migration %s failed: %w", entry.Name(), err)
+		}
 
-        if err := tx.Commit(); err != nil {
-            return err
-        }
+		// Record migration
+		_, err = tx.Exec("INSERT INTO schema_migrations (version) VALUES (?)", version)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
 
-        slog.Info("Migration completed", "file", entry.Name())
-    }
+		if err := tx.Commit(); err != nil {
+			return err
+		}
 
-    return nil
+		slog.Info("Migration completed", "file", entry.Name())
+	}
+
+	return nil
 }
 
 func (db *Db) getAppliedMigrations() (map[int]bool, error) {
-    rows, err := db.inner.Query("SELECT version FROM schema_migrations")
-    if err != nil {
-        return nil, err
-    }
-    defer rows.Close()
+	rows, err := db.inner.Query("SELECT version FROM schema_migrations")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
 
-    applied := make(map[int]bool)
+	applied := make(map[int]bool)
 	var version int
 
-    for rows.Next() {
-        if err := rows.Scan(&version); err != nil {
-            return nil, err
-        }
-        applied[version] = true
-    }
+	for rows.Next() {
+		if err := rows.Scan(&version); err != nil {
+			return nil, err
+		}
+		applied[version] = true
+	}
 
-    return applied, nil
+	return applied, nil
 }
 
 func extractVersion(filename string) int {
-    // Extract number from "001_init.sql" -> 1
-    var version int
-    fmt.Sscanf(filename, "%d", &version)
-    return version
+	// Extract number from "001_init.sql" -> 1
+	var version int
+	fmt.Sscanf(filename, "%d", &version)
+	return version
 }
-

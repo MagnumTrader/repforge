@@ -59,11 +59,11 @@ func (d *Db) GetExercise(id int) (*domain.Exercise, error) {
 }
 
 // SaveExercise implements domain.ExerciseRepo.
-func (d *Db) CreateExercise(workout *domain.Exercise) error {
+func (d *Db) CreateExercise(exercise *domain.Exercise) error {
 
 	query := fmt.Sprintf("insert into %s (name, category) values (?, ?)", exerciseDbName)
 
-	result, err := d.inner.Exec(query, workout.Name, workout.Category)
+	result, err := d.inner.Exec(query, exercise.Name, exercise.Category)
 	if err != nil {
 		slog.Error("Failed to insert exercise", "error", err)
 		return err
@@ -72,14 +72,18 @@ func (d *Db) CreateExercise(workout *domain.Exercise) error {
 	// NOTE: fails only if not supported (i think)
 	id, _ := result.LastInsertId()
 
-	workout.Id = int(id)
+	exercise.Id = int(id)
 
 	return nil
 }
 
 // UpdateExercise implements domain.ExerciseRepo.
-func (d *Db) UpdateExercise(workout *domain.Exercise) error {
-	panic("unimplemented")
+func (d *Db) UpdateExercise(ex *domain.Exercise) error {
+	query := "UPDATE %s set name=?, category=? where id = ?"
+	if _, err := d.inner.Exec(query, ex.Name, ex.Category, ex.Id); err != nil {
+		return err
+	}
+	return nil
 }
 
 

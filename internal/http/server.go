@@ -34,11 +34,11 @@ func GetRouter() *gin.Engine {
 	r.Static("/static", "./internal/http/static")
 
 	sqlDb := db.NewDb()
-	workoutService := services.NewWorkoutService(sqlDb)
+	workoutService := services.NewWorkoutService(sqlDb, sqlDb)
 	routes.RegisterWorkoutRoutes(r, workoutService)
 
-	mem := db.NewInMem()
-	exerciseService := services.NewExerciseService(mem)
+	// TODO: This doesnt work with the database
+	exerciseService := services.NewExerciseService(sqlDb)
 	routes.RegisterExerciseRoutes(r, exerciseService)
 
 	r.GET("/", mainPage)

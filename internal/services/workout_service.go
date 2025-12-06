@@ -3,12 +3,14 @@ package services
 import "github.com/MagnumTrader/repforge/internal/domain"
 
 type WorkoutService struct {
-	repo domain.WorkOutRepo
+	workoutRepo         domain.WorkOutRepo
+	workoutExerciseRepo domain.WorkoutExerciseRepo
 }
 
-func NewWorkoutService(repo domain.WorkOutRepo) *WorkoutService {
+func NewWorkoutService(woRepo domain.WorkOutRepo, woExRepo domain.WorkoutExerciseRepo) *WorkoutService {
 	return &WorkoutService{
-		repo: repo,
+		workoutRepo:         woRepo,
+		workoutExerciseRepo: woExRepo,
 	}
 }
 
@@ -20,7 +22,7 @@ func (s *WorkoutService) CreateWorkout(date, kind, note string, duration int) (*
 		Notes:    note,
 	}
 
-	if err := s.repo.CreateWorkout(workout); err != nil {
+	if err := s.workoutRepo.CreateWorkout(workout); err != nil {
 		return nil, err
 	}
 
@@ -28,16 +30,16 @@ func (s *WorkoutService) CreateWorkout(date, kind, note string, duration int) (*
 }
 
 func (s *WorkoutService) EditWorkout(workout *domain.Workout) error {
-	return s.repo.UpdateWorkout(workout)
+	return s.workoutRepo.UpdateWorkout(workout)
 }
 func (s *WorkoutService) DeleteWorkout(id int) error {
-	return s.repo.DeleteWorkout(id)
+	return s.workoutRepo.DeleteWorkout(id)
 }
 
 func (s *WorkoutService) GetWorkout(id int) (*domain.Workout, error) {
-	return s.repo.GetWorkout(id)
+	return s.workoutRepo.GetWorkout(id)
 }
 
 func (s *WorkoutService) GetAll() ([]domain.Workout, error) {
-	return s.repo.GetAllWorkouts(0)
+	return s.workoutRepo.GetAllWorkouts(0)
 }

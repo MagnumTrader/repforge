@@ -126,6 +126,10 @@ func (w *Db) GetWorkoutExercise(id int) (*domain.WorkoutExercise, error) {
 	panic("unimplemented")
 }
 
+func (w *Db) GetAllForWorkout(workout_id int) ([]domain.WorkoutExercise, error) {
+	panic("unimplemented")
+}
+
 // GetAll implements domain.CrudRepo.
 func (w *Db) GetAllWorkoutExercises(userId int) ([]domain.WorkoutExercise, error) {
 	panic("unimplemented")

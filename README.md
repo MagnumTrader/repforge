@@ -39,12 +39,13 @@ Then its type safe all the way
 # Todos
 - [ ] generic forms and details pages
 - [ ] Add workoutExercise for the workouts, a workoutexercise contains sets and a Exercise
+      We should be able to go to the workoutsdetail page, and add workoutexercise to it.
+      if we come back it should be stored through the workoutExercise repo, NO SETS yet!
 - [ ] add Sets (number of reps + weights of exercises) then have a workout that we relate that rep and weight/time to 
 - [ ] Create a cli that uses the same service for testing
-- [ ] Add db repo for exercises
 - [ ] Add tests for service..
 - [ ] Add ctx in db calls and service?
-- [ ] Move to generic repo for entities
+- [x] Add db repo for exercises
 - [x] Updating lists
 - [x] Exercise form
 - [x] Edit exercise
