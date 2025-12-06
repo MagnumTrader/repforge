@@ -21,7 +21,7 @@ func (e *ExerciseService) CreateExercise(name, category string) (*domain.Exercis
 		Name:     name,
 		Category: domain.Category(category),
 	}
-	err := e.repo.SaveExercise(ex)
+	err := e.repo.CreateExercise(ex)
 
 	if err != nil {
 		return nil, fmt.Errorf("failed to save exercise: %w", err)
