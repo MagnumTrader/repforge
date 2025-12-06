@@ -1,12 +1,10 @@
 package services
 
 import (
-	"testing"
 
 	"github.com/MagnumTrader/repforge/internal/domain"
 )
 
-var _ domain.WorkOutRepo = mockWRepo{}
 
 type mockWRepo struct{
 
@@ -41,23 +39,3 @@ func (m mockWRepo) UpdateWorkout(workout *domain.Workout) error {
 	panic("unimplemented")
 }
 
-func mockRepo() domain.WorkOutRepo {
-	return mockWRepo{}
-}
-
-func Test(t *testing.T) {
-
-	/*
-
-	   So what is it we are going to test with the service.
-
-	   First we ned a mock repo
-	   thats it?
-
-	*/
-
-	repo := mockRepo()
-	service := NewWorkoutService(repo)
-	service.CreateWorkout("asdf", "kl", "note", 1234)
-	t.Fatal("this failed")
-}

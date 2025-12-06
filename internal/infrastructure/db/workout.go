@@ -7,6 +7,7 @@ import (
 	"github.com/MagnumTrader/repforge/internal/domain"
 )
 
+
 func (d *Db) GetWorkout(id int) (*domain.Workout, error) {
 	row := d.inner.QueryRow("select id, date, type, duration, notes  from workouts where id=?", id)
 
@@ -35,7 +36,7 @@ func (d *Db) GetAllWorkouts(userId int) ([]domain.Workout, error) {
 	}
 	defer rows.Close()
 
-	workouts = make([]domain.Workout, 0)
+	workouts := make([]domain.Workout, 0)
 
 	wo := &domain.Workout{}
 
@@ -58,7 +59,7 @@ func (d *Db) GetAllWorkouts(userId int) ([]domain.Workout, error) {
 	return workouts, nil
 }
 
-func (d *Db) SaveWorkout(workout *domain.Workout) error {
+func (d *Db) CreateWorkout(workout *domain.Workout) error {
 	row, err := d.inner.Exec("INSERT INTO workouts (date, duration, type, notes) VALUES (?, ?, ?, ?)",
 		workout.Date,
 		workout.Duration,
@@ -109,79 +110,29 @@ func (d *Db) UpdateWorkout(workout *domain.Workout) error {
 }
 
 
-const exerciseDbName = "exercises"
-// DeleteExercise implements domain.ExerciseRepo.
-func (d *Db) DeleteExercise(id int) error {
 
-	query := fmt.Sprintf("DELETE from %s where id = %d", exerciseDbName, id)
-
-	res, err := d.inner.Exec(query)
-
-	if err != nil {
-		return fmt.Errorf("Failed to delete exercise with id %d: %w", id, err)
-	}
-
-	affected, err := res.RowsAffected()
-	if err != nil {
-		// not supported so cant check rows affected
-	  return nil
-	}
-
-	if affected == 0 {
-		return fmt.Errorf("Failed to delete exercise, 0 rows affected!")
-	}
-
-	return nil
-}
-
-// GetAllExercise implements domain.ExerciseRepo.
-func (d *Db) GetAllExercise(userId int) ([]domain.Exercise, error) {
-
-	query := fmt.Sprintf("select * from %s", exerciseDbName)
-	rows, err := d.inner.Query(query)
-
-	if err != nil {
-		return nil, fmt.Errorf("Failed to fetch all exercises %w", err)
-	}
-		
-	exerciseList := []domain.Exercise{}
-	for rows.Next() {
-		ex := domain.Exercise{}
-		rows.Scan(&ex.Id, &ex.Name, &ex.Category)
-		exerciseList = append(exerciseList, ex)
-	}
-
-	return exerciseList, nil
-}
-
-// GetExercise implements domain.ExerciseRepo.
-func (d *Db) GetExercise(id int) (*domain.Exercise, error) {
+// Create implements domain.CrudRepo.
+func (w *Db) CreateWorkoutExercise(instance *domain.WorkoutExercise) error {
 	panic("unimplemented")
 }
 
-// SaveExercise implements domain.ExerciseRepo.
-func (d *Db) CreateExercise(workout *domain.Exercise) error {
-
-	query := fmt.Sprintf("insert into %s (name, category) values (?, ?)", exerciseDbName)
-
-	result, err := d.inner.Exec(query, workout.Name, workout.Category)
-	if err != nil {
-		slog.Error("Failed to insert exercise", "error", err)
-		return err
-	}
-
-	// NOTE: fails only if not supported (i think)
-	id, _ := result.LastInsertId()
-
-	workout.Id = int(id)
-
-	return nil
-}
-
-// UpdateExercise implements domain.ExerciseRepo.
-func (d *Db) UpdateExercise(workout *domain.Exercise) error {
+// Delete implements domain.CrudRepo.
+func (w *Db) DeleteWorkoutExercise(id int) error {
 	panic("unimplemented")
 }
 
+// Get implements domain.CrudRepo.
+func (w *Db) GetWorkoutExercise(id int) (*domain.WorkoutExercise, error) {
+	panic("unimplemented")
+}
 
+// GetAll implements domain.CrudRepo.
+func (w *Db) GetAllWorkoutExercises(userId int) ([]domain.WorkoutExercise, error) {
+	panic("unimplemented")
+}
+
+// Update implements domain.CrudRepo.
+func (w *Db) UpdateWorkoutExercise(workoutexercise *domain.WorkoutExercise) error {
+	panic("unimplemented")
+}
 

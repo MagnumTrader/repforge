@@ -20,7 +20,7 @@ func (s *WorkoutService) CreateWorkout(date, kind, note string, duration int) (*
 		Notes:    note,
 	}
 
-	if err := s.repo.SaveWorkout(workout); err != nil {
+	if err := s.repo.CreateWorkout(workout); err != nil {
 		return nil, err
 	}
 
