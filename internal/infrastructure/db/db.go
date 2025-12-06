@@ -17,7 +17,7 @@ type Db struct {
 }
 
 func NewDb() *Db {
-	db, err := sql.Open("sqlite3", "data/repforge.db")
+	db, err := sql.Open("sqlite3", "file:data/repforge.db?_foreign_keys=on")
 
 	if err != nil {
 		panic(err)
@@ -108,7 +108,7 @@ func (db *Db) runMigrations() error {
             return err
         }
 
-        slog.Info("Migration %s completed", "file", entry.Name())
+        slog.Info("Migration completed", "file", entry.Name())
     }
 
     return nil
