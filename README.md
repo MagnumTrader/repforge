@@ -1,6 +1,5 @@
 # Repforge
 
-TODO:
 Wow for adjusting an entity
 - Do the change in domain Entity
 - Db migrations

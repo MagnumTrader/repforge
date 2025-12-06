@@ -37,7 +37,6 @@ func GetRouter() *gin.Engine {
 	workoutService := services.NewWorkoutService(sqlDb, sqlDb)
 	routes.RegisterWorkoutRoutes(r, workoutService)
 
-	// TODO: This doesnt work with the database
 	exerciseService := services.NewExerciseService(sqlDb)
 	routes.RegisterExerciseRoutes(r, exerciseService)
 

@@ -54,6 +54,7 @@ func (d *Db) GetAllExercise(userId int) ([]domain.Exercise, error) {
 	return exerciseList, nil
 }
 
+// TODO: We have to do stuff here
 func (d *Db) GetExercise(id int) (*domain.Exercise, error) {
 	panic("unimplemented")
 }
@@ -69,6 +70,7 @@ func (d *Db) CreateExercise(exercise *domain.Exercise) error {
 		return err
 	}
 
+	// TODO: Investigate if this is handled properly?
 	// NOTE: fails only if not supported (i think)
 	id, _ := result.LastInsertId()
 
