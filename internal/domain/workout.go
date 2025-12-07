@@ -13,7 +13,7 @@ type WorkoutExerciseRepo interface {
 	GetWorkoutExercise(id int) (*WorkoutExercise, error)
 	GetAllWorkoutExercises(userId int) ([]WorkoutExercise, error)
 	GetAllForWorkout(workout_id int) ([]WorkoutExercise, error)
-	CreateWorkoutExercise(workoutExercise *WorkoutExercise) error
+	CreateWorkoutExercise(workoutId, exerciseId int) error
 	DeleteWorkoutExercise(id int) error
 	UpdateWorkoutExercise(workoutExercise *WorkoutExercise) error
 

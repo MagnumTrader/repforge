@@ -184,6 +184,13 @@ func (h *workout) DeleteWorkout(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
+func (h *workout) GetWorkoutExercises(ctx *gin.Context) {
+
+	id, _ := parseId(ctx)
+	ex, _ := h.service.GetWorkoutExercises(id)
+
+	ctx.JSON(http.StatusOK, ex)
+}
 //============================ HELPERS ============================
 
 var (

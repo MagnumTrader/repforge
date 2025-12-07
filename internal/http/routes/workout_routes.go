@@ -1,6 +1,7 @@
 package routes
 
 import (
+
 	"github.com/MagnumTrader/repforge/internal/http/handlers"
 	"github.com/MagnumTrader/repforge/internal/services"
 	"github.com/gin-gonic/gin"
@@ -21,6 +22,14 @@ func RegisterWorkoutRoutes(r *gin.Engine, service *services.WorkoutService) {
 	grp.GET("/new", handler.NewWorkoutForm)
 	grp.POST("/new", handler.NewWorkout)
 	grp.DELETE("/:id", handler.DeleteWorkout)
+
+
+	// ======== Handlers for Workoutexercises ==========
+
+	// Should return all the exercises for a 
+	grp.GET("/:id/exercises", handler.GetWorkoutExercises)
+	grp.GET("/:id/exercises/:exerciseId")
+	grp.POST("/:id/exercises/:exerciseId")
 }
 
 func RegisterExerciseRoutes(r *gin.Engine, service *services.ExerciseService)()  {

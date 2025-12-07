@@ -22,28 +22,19 @@ Wow for adjusting an entity
 - Did you update in_mem.go for local testing?
 - Did existing tests break? (good - they caught something!)
 
-lets go back to basics?
 
-<!--
-NOTE: What should be the next step, 
----
-i can have a type switch in the handler, no the handler is already type safe,
-So it has to be in the rendering thing.
-To make a genneric creation of a form. it can take FormRenderer? then i implement this wrapper, and pass it
-What you get back from a renderer is formfields (templ.component)
-Then its type safe all the way
-
--> General form handling and presentation pages for reusability
--->
 # Todos
-- [ ] generic forms and details pages
 - [ ] Add workoutExercise for the workouts, a workoutexercise contains sets and a Exercise
       We should be able to go to the workoutsdetail page, and add workoutexercise to it.
       if we come back it should be stored through the workoutExercise repo, NO SETS yet!
+      - [ ] plus button that i can add exercise with
+      - [ ] list all the exercises to add it
+      - [ ] a drop down where we can now add sets
+
 - [ ] add Sets (number of reps + weights of exercises) then have a workout that we relate that rep and weight/time to 
-- [ ] Create a cli that uses the same service for testing
 - [ ] Add tests for service..
 - [ ] Add ctx in db calls and service?
+- [ ] generic forms and details pages
 - [x] Add db repo for exercises
 - [x] Updating lists
 - [x] Exercise form

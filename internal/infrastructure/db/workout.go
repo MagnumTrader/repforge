@@ -112,15 +112,14 @@ func (d *Db) UpdateWorkout(workout *domain.Workout) error {
 
 
 // Create implements domain.CrudRepo.
-func (d *Db) CreateWorkoutExercise(workout_id int, instance *domain.WorkoutExercise) error {
-
+func (d *Db) CreateWorkoutExercise(workoutId, exerciseId int) error {
 	query := `insert into workoutexercises
 			(workout_id, exercise_id, order_in_exercise) 
 			select ?, ?, coalesce(max(order_in_exercise), 0) + 1 
 			from workoutexercises 
 			where workout_id = ?)`
 
-	res, err := d.inner.Exec(query, workout_id, instance.Exercise.Id, workout_id)
+	res, err := d.inner.Exec(query, workoutId, exerciseId, workoutId)
 
 	if err != nil {
 		return fmt.Errorf("Failed to create workoutexercise error: %w", err)
@@ -145,8 +144,37 @@ func (w *Db) GetWorkoutExercise(id int) (*domain.WorkoutExercise, error) {
 	panic("unimplemented")
 }
 
-func (w *Db) GetAllForWorkout(workout_id int) ([]domain.WorkoutExercise, error) {
-	panic("unimplemented")
+func (d *Db) GetAllForWorkout(workout_id int) ([]domain.WorkoutExercise, error) {
+	query := `select w.id, e.id as eId, e.name, e.category from workoutexercises w left join exercises e on w.exercise_id=e.id where workout_id = ?`
+	rows, err := d.inner.Query(query, workout_id)
+	if err != nil {
+	  return nil, err
+	}
+	defer rows.Close()
+
+	wos := make([]domain.WorkoutExercise, 0)
+	var wId, eId int
+	var name, category string
+	for rows.Next() {
+
+		err := rows.Scan(&wId, &eId, &name, &category)
+		if err != nil {
+			slog.Error("failed to scan workoutexercise", "id", eId, "name", name, "category", category)
+			continue
+		}
+
+		wo := domain.WorkoutExercise{
+			Id:       wId,
+			Exercise: domain.Exercise{
+				Id:       eId,
+				Name:     name,
+				Category: category,
+			},
+			Sets:     []domain.Set{},
+		}
+		wos = append(wos, wo)
+	}
+	return wos, nil
 }
 
 // GetAll implements domain.CrudRepo.
