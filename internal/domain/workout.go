@@ -16,6 +16,12 @@ type WorkoutExerciseRepo interface {
 	CreateWorkoutExercise(workoutExercise *WorkoutExercise) error
 	DeleteWorkoutExercise(id int) error
 	UpdateWorkoutExercise(workoutExercise *WorkoutExercise) error
+
+	// Methods for sets here?
+	AddSet(WeId int, set *Set) error
+	// you must provide the id?
+	DeleteSet(id int) error
+	UpdateSet(set *Set) error
 }
 
 type Set struct {

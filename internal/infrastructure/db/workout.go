@@ -112,8 +112,27 @@ func (d *Db) UpdateWorkout(workout *domain.Workout) error {
 
 
 // Create implements domain.CrudRepo.
-func (w *Db) CreateWorkoutExercise(instance *domain.WorkoutExercise) error {
-	panic("unimplemented")
+func (d *Db) CreateWorkoutExercise(workout_id int, instance *domain.WorkoutExercise) error {
+
+	query := `insert into workoutexercises
+			(workout_id, exercise_id, order_in_exercise) 
+			select ?, ?, coalesce(max(order_in_exercise), 0) + 1 
+			from workoutexercises 
+			where workout_id = ?)`
+
+	res, err := d.inner.Exec(query, workout_id, instance.Exercise.Id, workout_id)
+
+	if err != nil {
+		return fmt.Errorf("Failed to create workoutexercise error: %w", err)
+	}
+
+	affected, err := res.RowsAffected()
+
+	if affected <= 0 && err == nil {
+		// No error but affected is still 0, something is wrong
+		return fmt.Errorf("No changes, and no error")
+	}
+	return nil
 }
 
 // Delete implements domain.CrudRepo.
@@ -140,3 +159,6 @@ func (w *Db) UpdateWorkoutExercise(workoutexercise *domain.WorkoutExercise) erro
 	panic("unimplemented")
 }
 
+func (d *Db) AddSet(WeId int, set *domain.Set) error {return nil}
+func (d *Db) DeleteSet(id int) error {return nil}
+func (d *Db) UpdateSet(set *domain.Set) error {return nil}

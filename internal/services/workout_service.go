@@ -43,3 +43,15 @@ func (s *WorkoutService) GetWorkout(id int) (*domain.Workout, error) {
 func (s *WorkoutService) GetAll() ([]domain.Workout, error) {
 	return s.workoutRepo.GetAllWorkouts(0)
 }
+
+func (s *WorkoutService) GetWorkoutExercises(workout_id int) ([]domain.WorkoutExercise, error) {
+	// we are on the details page, and we need all the workoutsexercises for this workout
+	// the workout service already have the workoutExerciseRepo
+	// the template should return a partial that then calls into what it should have
+	all, err := s.workoutExerciseRepo.GetAllForWorkout(workout_id)
+	if err != nil {
+	  return nil, err
+	}
+	
+	return all, nil
+}
