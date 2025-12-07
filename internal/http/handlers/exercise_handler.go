@@ -99,7 +99,7 @@ func (e *exerciseHandler) EditExercise(c *gin.Context) {
 	exercise := domain.Exercise{
 		Id:       id,
 		Name:     ex.Name,
-		Category: domain.Category(ex.Category),
+		Category: ex.Category,
 	}
 
 	err = e.service.EditExercise(&exercise)

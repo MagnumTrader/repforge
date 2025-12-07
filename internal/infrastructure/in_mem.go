@@ -65,12 +65,12 @@ var exercises = []*domain.Exercise {
 	{
 		Id:   1,
 		Name: "Leg Press",
-		Category: domain.CategoryLegs,
+		Category: "legs",
 	},
 	{
 		Id:   2,
 		Name: "Bench Press",
-		Category: domain.CategoryChest,
+		Category: "chest",
 	},
 }
 

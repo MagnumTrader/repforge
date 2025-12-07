@@ -23,11 +23,10 @@ func (d *Db) GetExercise(id int) (*domain.Exercise, error) {
 	  return nil, err
 	}
 	
-
 	ex := &domain.Exercise{
 		Id:       id,
 		Name:     name,
-		Category: domain.Category(category),
+		Category: category,
 	}
 	return ex, nil
 }

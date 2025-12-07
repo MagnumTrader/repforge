@@ -55,7 +55,7 @@ func parseExercise(args []string) (*domain.Exercise, error) {
 	ex := &domain.Exercise{}
 
 	ex.Name = args[0]
-	ex.Category = domain.Category(args[1])
+	ex.Category = args[1]
 
 	return ex, nil
 }

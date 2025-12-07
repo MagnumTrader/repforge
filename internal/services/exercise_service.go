@@ -19,7 +19,7 @@ type ExerciseService struct {
 func (e *ExerciseService) CreateExercise(name, category string) (*domain.Exercise, error) {
 	ex := &domain.Exercise{
 		Name:     name,
-		Category: domain.Category(category),
+		Category: category,
 	}
 	err := e.repo.CreateExercise(ex)
 

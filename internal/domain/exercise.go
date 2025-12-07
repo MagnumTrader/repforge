@@ -19,16 +19,7 @@ type ExerciseRepo interface {
 type Exercise struct {
 	Id int
 	Name string
-	Category Category
+	Category string
 }
-
-type Category string
-
-const (
-	CategoryLegs = "legs"
-	CategoryArms = "arms"
-	CategoryChest = "chest"
-)
-
 
 
