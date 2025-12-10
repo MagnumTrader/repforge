@@ -184,6 +184,28 @@ func (h *workout) DeleteWorkout(ctx *gin.Context) {
 	ctx.Status(http.StatusOK)
 }
 
+func (h *workout) GetWorkoutExerciseNewForm(ctx *gin.Context) {
+
+	//  this should probably be the same exercise form that we already use BUT!
+	// it should   not post to creating a new exercise type
+
+	// oob swap targeting the exercise table and after last child
+
+	// before end
+
+	// should we just return a thing
+
+	template := ui.ExerciseRows([]domain.WorkoutExercise{{
+		Id: 5,
+		Exercise: domain.Exercise{
+			Id:       0,
+			Name:     "Test",
+			Category: "Add",
+		},
+	}})
+
+	template.Render(ctx.Request.Context(), ctx.Writer)
+}
 func (h *workout) GetWorkoutExercises(ctx *gin.Context) {
 	// this is where we should return only the table rows, BUT!
 	// this wont be used elsewhere right now i think atleast
@@ -195,6 +217,7 @@ func (h *workout) GetWorkoutExercises(ctx *gin.Context) {
 	template := ui.ExerciseRows(ex)
 	template.Render(ctx.Request.Context(), ctx.Writer)
 }
+
 //============================ HELPERS ============================
 
 var (
@@ -228,4 +251,3 @@ func (h *workout) getWorkoutByCtxId(ctx *gin.Context) (*domain.Workout, error) {
 
 	return wo, nil
 }
-

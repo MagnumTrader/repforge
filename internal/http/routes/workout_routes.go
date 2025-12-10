@@ -28,6 +28,7 @@ func RegisterWorkoutRoutes(r *gin.Engine, service *services.WorkoutService) {
 
 	// Should return all the exercises for a 
 	grp.GET("/:id/exercises", handler.GetWorkoutExercises)
+	grp.GET("/:id/exercises/new", handler.GetWorkoutExerciseNewForm)
 	grp.GET("/:id/exercises/:exerciseId")
 	grp.POST("/:id/exercises/:exerciseId")
 }
