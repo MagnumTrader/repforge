@@ -72,11 +72,20 @@ templ WorkoutDetailsPartial(workout domain.Workout) {
 			</table>
 		</div>
 		<div>
-			<table class="exercise-table">
-				<tr hx-get={ fmt.Sprintf("/workouts/%d/exercises", workout.Id) } hx-trigger="load once" hx-swap="afterend">
-					<th>Exercise</th>
-					<th>Category</th>
-				</tr>
+			<table
+				class="exercise-table"
+				hx-get={ fmt.Sprintf("/workouts/%d/exercises", workout.Id) }
+				hx-trigger="load once"
+				hx-swap="innerHTML"
+				hx-target="find tbody"
+			>
+				<thead>
+					<tr>
+						<th>Exercise</th>
+						<th>Category</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
 			</table>
 			<p
 				hx-get={ fmt.Sprintf("/workouts/%d/exercises/new", workout.Id) }
@@ -93,8 +102,9 @@ templ ExerciseRows(exercises []domain.WorkoutExercise) {
 			{{ url := fmt.Sprintf("/exercises/%d", r.Exercise.Id) }}
 			<td hx-get={ url } hx-push-url={ url } hx-target="#content">{ r.Exercise.Name }</td>
 			<td>{ r.Exercise.Category }</td>
-			<td>@NavButton("x", "#")
-</td>
+			<td>
+				@NavButton("x", "")
+			</td>
 		</tr>
 	}
 }
