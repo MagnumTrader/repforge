@@ -10,7 +10,6 @@ import (
 
 const exerciseDbName = "exercises"
 
-// TODO: We have to do stuff here
 func (d *Db) GetExercise(id int) (*domain.Exercise, error) {
 
 	query := "select name, category from exercises where id = ?"
@@ -32,6 +31,7 @@ func (d *Db) GetExercise(id int) (*domain.Exercise, error) {
 }
 
 // GetAllExercise implements domain.ExerciseRepo.
+// can we do that here, how can we implement listing all thos?
 func (d *Db) GetAllExercise(userId int) ([]domain.Exercise, error) {
 
 	query := fmt.Sprintf("select * from %s", exerciseDbName)

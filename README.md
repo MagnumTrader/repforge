@@ -35,6 +35,7 @@ Wow for adjusting an entity
 - [ ] Add tests for service..
 - [ ] Add ctx in db calls and service?
 - [ ] generic forms and details pages
+- [ ] lets go tailwind again?
 - [x] Add db repo for exercises
 - [x] Updating lists
 - [x] Exercise form

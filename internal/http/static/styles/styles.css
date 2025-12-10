@@ -185,3 +185,14 @@ visibility: visible;
         text-decoration: underline;
     }
 }
+
+
+
+.wo-details-body {
+    width: 100%;
+    padding-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+
+}

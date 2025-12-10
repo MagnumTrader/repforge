@@ -185,11 +185,15 @@ func (h *workout) DeleteWorkout(ctx *gin.Context) {
 }
 
 func (h *workout) GetWorkoutExercises(ctx *gin.Context) {
+	// this is where we should return only the table rows, BUT!
+	// this wont be used elsewhere right now i think atleast
 
 	id, _ := parseId(ctx)
 	ex, _ := h.service.GetWorkoutExercises(id)
 
-	ctx.JSON(http.StatusOK, ex)
+	setHtml200(ctx)
+	template := ui.ExerciseRows(ex)
+	template.Render(ctx.Request.Context(), ctx.Writer)
 }
 //============================ HELPERS ============================
 

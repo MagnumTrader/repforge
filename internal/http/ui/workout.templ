@@ -5,139 +5,156 @@ import "fmt"
 import "time"
 
 templ WorkOutListPartial(workouts []domain.Workout) {
-<div class="listwrapper">
-    <h1>List of workouts </h1>
-    <table>
-        <thead>
-            <th>Date</th>
-            <th>Duration</th>
-            <th>Type</th>
-        </thead>
-        <tbody id="workout-list">
-            for _, wo := range workouts {
-            @WorkoutTableRow(wo)
-            }
-        </tbody>
-    </table>
-    <span 
-    hx-get="/workouts/new" 
-    class="link" 
-    hx-target="#overlay-content" 
-    _="on click remove .hidden from #overlay">
-        Add
-        workout
-    </span>
-</div>
+	<div class="listwrapper">
+		<h1>List of workouts </h1>
+		<table>
+			<thead>
+				<th>Date</th>
+				<th>Duration</th>
+				<th>Type</th>
+			</thead>
+			<tbody id="workout-list">
+				for _, wo := range workouts {
+					@WorkoutTableRow(wo)
+				}
+			</tbody>
+		</table>
+		<span hx-get="/workouts/new" class="link" hx-target="#overlay-content" _="on click remove .hidden from #overlay">
+			Add
+			workout
+		</span>
+	</div>
 }
 
 templ WorkoutTableRow(wo domain.Workout) {
-<tr id={fmt.Sprintf("workoutid-%d", wo.Id)}>
-    <td>
-        @NavButton(wo.Date, fmt.Sprintf("/workouts/%d", wo.Id))
-    </td>
-    <td>{ wo.Duration }</td>
-    <td>{ wo.Kind }</td>
-    <td class="table-buttons">
-        <span
-        hx-get={fmt.Sprintf("/workouts/edit/%d", wo.Id)}
-        hx-target="#overlay-content" 
-        _="on click remove .hidden from #overlay">
-            edit
-        </span>
-        <span 
-        hx-delete={fmt.Sprintf("/workouts/%d", wo.Id)}
-        hx-target="closest tr"
-        hx-swap="outerHTML">
-            delete
-        </span>
-    </td>
-</tr>
+	<tr id={ fmt.Sprintf("workoutid-%d", wo.Id) }>
+		<td>
+			@NavButton(wo.Date, fmt.Sprintf("/workouts/%d", wo.Id))
+		</td>
+		<td>{ wo.Duration }</td>
+		<td>{ wo.Kind }</td>
+		<td class="table-buttons">
+			<span
+				hx-get={ fmt.Sprintf("/workouts/edit/%d", wo.Id) }
+				hx-target="#overlay-content"
+				_="on click remove .hidden from #overlay"
+			>
+				edit
+			</span>
+			<span hx-delete={ fmt.Sprintf("/workouts/%d", wo.Id) } hx-target="closest tr" hx-swap="outerHTML">
+				delete
+			</span>
+		</td>
+	</tr>
 }
 
 templ WorkoutDetailsPartial(workout domain.Workout) {
-<h1>Workout Details</h1>
-<table>
-    <tr>
-        <th>Date</th>
-        <td>{ workout.Date }</td>
-    </tr>
-    <tr>
-        <th>Type</th>
-        <td>{ workout.Kind }</td>
-    </tr>
-    <tr>
-        <th>Duration (minutes)</th>
-        <td>{ workout.Duration }</td>
-    </tr>
-    <tr>
-        <th>Notes</th>
-        <td>{ workout.Notes }</td>
-    </tr>
-</table>
+	<h1>Workout Details: { workout.Id }</h1>
+	<div class="wo-details-body">
+		<div>
+			<table>
+				<tr>
+					<th>Date</th>
+					<td>{ workout.Date }</td>
+				</tr>
+				<tr>
+					<th>Type</th>
+					<td>{ workout.Kind }</td>
+				</tr>
+				<tr>
+					<th>Duration (minutes)</th>
+					<td>{ workout.Duration }</td>
+				</tr>
+				<tr>
+					<th>Notes</th>
+					<td>{ workout.Notes }</td>
+				</tr>
+			</table>
+		</div>
+		<div>
+			<table class="exercise-table" hx-get={ fmt.Sprintf("/workouts/%d/exercises", workout.Id) } hx-trigger="load once" hx-swap="beforeend">
+				<tr>
+					<th>Exercise</th>
+					<th>Category</th>
+				</tr>
+			</table>
+		</div>
+	</div>
+}
+
+templ ExerciseRows(exercises []domain.WorkoutExercise) {
+	for _, r := range exercises {
+		<tr>
+			<td>{ r.Exercise.Name }</td>
+			<td>{ r.Exercise.Category }</td>
+		</tr>
+	}
 }
 
 type FormType = int
 
 const (
-    EditForm FormType = iota
-    NewForm 
+	EditForm FormType = iota
+	NewForm
 )
 
 templ WorkoutForm(workout *domain.Workout, newOrEdit FormType) {
-{{
-// Create different attributes dependant on the type of form
-// I can actually target the body ( dont remember the tag name should probably have consts)
-// OR an oob swap for the overlay, defined here!
-var attributes templ.Attributes = make(templ.Attributes, 0)
-var buttonText string
-switch newOrEdit {
-    case EditForm: 
-        attributes["hx-put"] = fmt.Sprintf("/workouts/%d", workout.Id)
-        attributes["hx-target"] = fmt.Sprintf("#workoutid-%d", workout.Id)
-        attributes["hx-swap"] = "outerHTML"
-        buttonText = "Update"
-    case NewForm: 
-        attributes["hx-post"] = "/workouts/new"
-        attributes["hx-target"] = "#workout-list"
-        attributes["hx-swap"] = "beforeend"
-        buttonText = "Create"
-}
-}}
-<form id="workout-form" {attributes...} 
-    _="on htmx:afterRequest
+	{{
+		// Create different attributes dependant on the type of form
+		// I can actually target the body ( dont remember the tag name should probably have consts)
+		// OR an oob swap for the overlay, defined here!
+		var attributes templ.Attributes = make(templ.Attributes, 0)
+		var buttonText string
+		switch newOrEdit {
+		case EditForm:
+			attributes["hx-put"] = fmt.Sprintf("/workouts/%d", workout.Id)
+			attributes["hx-target"] = fmt.Sprintf("#workoutid-%d", workout.Id)
+			attributes["hx-swap"] = "outerHTML"
+			buttonText = "Update"
+		case NewForm:
+			attributes["hx-post"] = "/workouts/new"
+			attributes["hx-target"] = "#workout-list"
+			attributes["hx-swap"] = "beforeend"
+			buttonText = "Create"
+		}
+	}}
+	<form
+		id="workout-form"
+		{ attributes... }
+		_="on htmx:afterRequest
         remove me 
         then add .hidden to #overlay
-    end">
-    @WorkoutFields(workout)
-    <button type="submit">{buttonText}</button>
-    <button type="button" 
-    _="on click remove #workout-form then add .hidden to #overlay">
-        Cancel
-    </button>
-</form>
+    end"
+	>
+		@WorkoutFields(workout)
+		<button type="submit">{ buttonText }</button>
+		<button type="button" _="on click remove #workout-form then add .hidden to #overlay">
+			Cancel
+		</button>
+	</form>
 }
 
 templ WorkoutFields(workout *domain.Workout) {
-{{
-    if workout == nil {
-        workout = &domain.Workout{}
-        workout.Date = time.Now().Format("2006-01-02")
-    }
-}}
-<div class="form-row">
-    <label for="date">Date</label>
-    <input id="date" name="date" type="date" value={ workout.Date } required />
-</div>
-<div class="form-row">
-    <label for="duration">Duration</label>
-    <input id="duration" name="duration" type="number" value={ workout.Duration } />
-</div>
-<div class="form-row">
-    <label for="type">Type</label>
-    <input id="type" name="type" type="text" value={ workout.Kind } required />
-</div>
-<div class="form-row">
-    <label for="note">Note</label>
-    <textarea id="note" name="note" type="text" rows="4">{workout.Notes}</textarea>
-</div>
+	{{
+		if workout == nil {
+			workout = &domain.Workout{}
+			workout.Date = time.Now().Format("2006-01-02")
+		}
+	}}
+	<div class="form-row">
+		<label for="date">Date</label>
+		<input id="date" name="date" type="date" value={ workout.Date } required/>
+	</div>
+	<div class="form-row">
+		<label for="duration">Duration</label>
+		<input id="duration" name="duration" type="number" value={ workout.Duration }/>
+	</div>
+	<div class="form-row">
+		<label for="type">Type</label>
+		<input id="type" name="type" type="text" value={ workout.Kind } required/>
+	</div>
+	<div class="form-row">
+		<label for="note">Note</label>
+		<textarea id="note" name="note" type="text" rows="4">{ workout.Notes }</textarea>
+	</div>
 }
